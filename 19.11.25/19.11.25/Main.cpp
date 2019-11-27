@@ -82,10 +82,9 @@ void Render(Object* _pObj)
 				SetCursorPosition(116, y, (char*)"■");
 			}
 		}
-
 	}
 	
-	
+	// cpu 데이터 처리 병목현상 검색
 	
 	//** 그리고 마지막으로 해당 좌표에 출력함.
 	SetCursorPosition(
