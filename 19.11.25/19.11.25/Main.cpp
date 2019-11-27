@@ -1,123 +1,100 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <Windows.h>
+#include "Headers.h"
 
-
-struct vector3
-{
-	float x, y;
-};
-
-struct Object
-{
-	char* pTexture;
-	vector3 Position;
-	vector3 Scale;
-	vector3 Rotate;
-};
+void Initialize(Object* _pObj);
+void Progress(Object* _pObj);
+void Render(Object* _pObj);
 
 void SetCursorPosition(float _x, float _y, char* _pTexture);
+void InputKey(Object* _pObj);
+void SetDirection(Object* _pObj);
 
 int main(void)
 {
-	/*
-	printf_s("Hello World!! \n");
-
-	int num = 1;
-	printf_s("입력 : \n");
-	scanf_s("%d", &num);
-	printf_s("%d", num);
-	*/
-
 	Object player;
+	Initialize(&player);
 
-	player.pTexture = (char*)"■";
-
-	player.Position.x = 6;
-	player.Position.y = 6;
-	
-	player.Scale.x = 3;
-	player.Scale.y = 4;
-
-	player.Rotate.x = 5;
-	player.Rotate.y = 6;
-
-	/*
-	printf_s("%s\n", player.pTexture);
-
-	printf_s("%f\n", player.Position.x);
-	printf_s("%f\n", player.Position.y);
-
-	printf_s("%f\n", player.Scale.x);
-	printf_s("%f\n", player.Scale.y);
-
-	printf_s("%f\n", player.Rotate.x);
-	printf_s("%f\n", player.Rotate.y);
-	*/
-
-
-	//** DWORD = unsigned long
-	//** GetTickCount() = 타이머(계속 증가함)
-
-	//** 타이머로 dwTime 값을 초기화.
 	DWORD dwTime = GetTickCount();
 
-	//** 무한루프
+	
+
+
 	while (true)
 	{
-		//** 만약에 dwTime + 500 보다 GetTickCount() 가 더 크다면...
-		if (dwTime + 80 < GetTickCount())
+		if (dwTime + 300 < GetTickCount())
 		{
-			//** 다시 타이머로 dwTime 값을 초기화.
 			dwTime = GetTickCount();
 
 			//** 화면을 모두 지움
 			system("cls");
 
-			//** GetAsyncKeyState() = 키 입력 확인 함수.
-			
+			Progress(&player);
+			Render(&player);
 
-
-
-			if (GetAsyncKeyState(VK_UP))
-			{
-				player.Position.y -= 1;
-			}
-			if (GetAsyncKeyState(VK_DOWN))
-			{
-				player.Position.y += 1;
-			}
-			if (GetAsyncKeyState(VK_RIGHT))
-			{
-				player.Position.x += 2;
-			}
-			if (GetAsyncKeyState(VK_LEFT))
-			{
-				player.Position.x -= 2;
-			}
-			
-			
-			
-			
-			//** 그리고 마지막으로 해당 좌표에 출력함.
-			SetCursorPosition(
-				player.Position.x,
-				player.Position.y,
-				player.pTexture);
 		}
 	}
 	   	  
-
-
-
-
-
+	
 
 
 	system("pause");
 
 	return 0;
 }
+
+
+// 초기화 내용관련 코드
+void Initialize(Object* _pObj)
+{
+	_pObj->pTexture = (char*)"■";
+
+	_pObj->Position.x = 6.f;
+	_pObj->Position.y = 3.f;
+
+	_pObj->Scale.x = 2.f;
+	_pObj->Scale.y = 1.f;
+
+	_pObj->Rotate = 3;
+
+}
+
+// 실행중 변경되는 사항에 대한 코드
+void Progress(Object* _pObj)
+{
+	//* 입력받은 키의 형태에 따라 방향을 ID 값으로 설정.
+	InputKey(_pObj);
+	
+	//** 설정된 ID 값으로 실제로 움직일 방향을 정함.
+	SetDirection(_pObj);
+}
+
+// 출력내용에 대한 코드
+void Render(Object* _pObj)
+{
+	for (int y = 0; y < (30 - 1); y++)
+	{
+		for (int x = 0; x < (118 - 1); x+=2)
+		{
+			if (y == 0 || y == 28)
+				SetCursorPosition(x, y, (char*)"■");
+			else
+			{
+				SetCursorPosition(0, y, (char*)"■");
+				SetCursorPosition(116, y, (char*)"■");
+			}
+		}
+
+	}
+	
+	
+	
+	//** 그리고 마지막으로 해당 좌표에 출력함.
+	SetCursorPosition(
+		_pObj->Position.x,
+		_pObj->Position.y,
+		_pObj->pTexture);
+	
+}
+
 
 
 //** _x, _y 좌표에 _pTexture 을 출력함.
@@ -129,3 +106,41 @@ void SetCursorPosition(float _x, float _y, char* _pTexture)
 	printf_s("%s\n", _pTexture);
 }
 
+//=> 입력받은 화살표키의 ID값을 설정함.   (enum ROTATEIDS 원형 참고)
+void InputKey(Object* _pObj)
+{
+	if (GetAsyncKeyState(VK_UP))
+		_pObj->Rotate = ROTATEIDS_UP;
+
+	if (GetAsyncKeyState(VK_DOWN))
+		_pObj->Rotate = ROTATEIDS_DOWN;
+
+	if (GetAsyncKeyState(VK_LEFT))
+		_pObj->Rotate = ROTATEIDS_LEFT;
+
+	if (GetAsyncKeyState(VK_RIGHT))
+		_pObj->Rotate = ROTATEIDS_RIGHT;
+}
+
+void SetDirection(Object* _pObj)
+{
+	//** 설정된 ID 값으로 실제로 움직일 방향을 설정함.
+	switch (_pObj->Rotate)
+	{
+	case ROTATEIDS_UP:
+		_pObj->Position.y -= 1;
+		break;
+
+	case ROTATEIDS_DOWN:
+		_pObj->Position.y += 1;
+		break;
+
+	case ROTATEIDS_LEFT:
+		_pObj->Position.x -= 2;
+		break;
+
+	case ROTATEIDS_RIGHT:
+		_pObj->Position.x += 2;
+		break;
+	}
+}
