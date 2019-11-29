@@ -90,9 +90,9 @@ void SetScene(Object* _pPlayer)
 //** _x, _y 좌표에 _pTexture 을 출력함.
 void SetCursorPosition(float _x, float _y, char* _pTexture)
 {
-	COORD Pos = { (SHORT)_x,(SHORT)_y };	
+	COORD Position = { (SHORT)_x,(SHORT)_y };	
 	
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Position);
 	printf_s("%s\n", _pTexture);
 }
 
