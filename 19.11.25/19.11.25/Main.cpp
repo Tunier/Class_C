@@ -6,28 +6,29 @@ SCENEID SceneState = SCENEIDS_LOGO;
 
 
 
+
 void SetScene(Object* _pPlayer);
 
 void SetCursorPosition(float _x, float _y, char* _pTexture);
 void InputKey(Object* _pObj);
 void SetDirection(Object* _pObj);
 
-//** Logo
+//** Logo 관련 전방선언
 void LogoInitialize();
 void LogoProgress();
 void LogoRender();
 
-//** Menu
+//** Menu 관련 전방선언
 void MenuInitialize();
 void MenuProgress();
 void MenuRender();
 
-//** Stage
+//** Stage 관련 전방선언
 void StageInitialize(Object* _pPlayer);
 void StageProgress(Object* _pPlayer);
 void StageRender(Object* _pPlayer);
 
-//** Player
+//** Player 관련 전방선언
 void PlayerInitialize(Object* _pObj);
 void PlayerProgress(Object* _pObj);
 void PlayerRender(Object* _pObj);
@@ -60,7 +61,7 @@ int main(void)
 	return 0;
 }
 
-// 
+// Scene 컨트롤.
 void SetScene(Object* _pPlayer)
 {
 	switch (SceneState)
@@ -208,7 +209,7 @@ void LogoInitialize()
 
 }
 
-// 로고 실행중 변경사항
+// Logo 실행중 변경사항
 void LogoProgress()
 {
 	if (GetAsyncKeyState('1'))
