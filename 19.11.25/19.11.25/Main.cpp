@@ -14,13 +14,10 @@ int main(void)
 	Initialize(&player);
 
 	DWORD dwTime = GetTickCount();
-
 	
-
-
 	while (true)
 	{
-		if (dwTime + 300 < GetTickCount())
+		if (dwTime + 60 < GetTickCount())
 		{
 			dwTime = GetTickCount();
 
@@ -33,9 +30,6 @@ int main(void)
 		}
 	}
 	   	  
-	
-
-
 	system("pause");
 
 	return 0;
@@ -47,8 +41,8 @@ void Initialize(Object* _pObj)
 {
 	_pObj->pTexture = (char*)"■";
 
-	_pObj->Position.x = 6.f;
-	_pObj->Position.y = 3.f;
+	_pObj->Position.x = 59.f;
+	_pObj->Position.y = 15.f;
 
 	_pObj->Scale.x = 2.f;
 	_pObj->Scale.y = 1.f;
@@ -70,31 +64,40 @@ void Progress(Object* _pObj)
 // 출력내용에 대한 코드
 void Render(Object* _pObj)
 {
+	//** 그리고 마지막으로 해당 좌표에 출력함.
+	SetCursorPosition(
+		_pObj->Position.x,
+		_pObj->Position.y,
+		_pObj->pTexture);
+
 	for (int y = 0; y < (30 - 1); y++)
 	{
-		for (int x = 0; x < (118 - 1); x+=2)
+		if (y == 0 || y == 28)
+			SetCursorPosition(0, y, (char*)"■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+		else
+		{
+			SetCursorPosition(0, y, (char*)"■");
+			SetCursorPosition(118, y, (char*)"■");
+		}
+	}
+	/*
+	for (int y = 0; y < (30 - 1); y++)
+	{
+		for (int x = 0; x < (120 - 1); x+=2)
 		{
 			if (y == 0 || y == 28)
 				SetCursorPosition(x, y, (char*)"■");
 			else
 			{
 				SetCursorPosition(0, y, (char*)"■");
-				SetCursorPosition(116, y, (char*)"■");
+				SetCursorPosition(118, y, (char*)"■");
 			}
 		}
 	}
-	
-	// cpu 데이터 처리 병목현상 검색
-	
-	//** 그리고 마지막으로 해당 좌표에 출력함.
-	SetCursorPosition(
-		_pObj->Position.x,
-		_pObj->Position.y,
-		_pObj->pTexture);
-	
+	*/
 }
 
-
+// cpu 데이터 처리 병목현상 검색
 
 //** _x, _y 좌표에 _pTexture 을 출력함.
 void SetCursorPosition(float _x, float _y, char* _pTexture)
@@ -127,19 +130,23 @@ void SetDirection(Object* _pObj)
 	switch (_pObj->Rotate)
 	{
 	case ROTATEIDS_UP:
-		_pObj->Position.y -= 1;
+		if (_pObj->Position.y != 1)
+			_pObj->Position.y -= 1;
 		break;
 
 	case ROTATEIDS_DOWN:
-		_pObj->Position.y += 1;
+		if (_pObj->Position.y != 27)
+			_pObj->Position.y += 1;
 		break;
 
 	case ROTATEIDS_LEFT:
-		_pObj->Position.x -= 2;
+		if (_pObj->Position.x > 2)
+			_pObj->Position.x -= 1;
 		break;
 
 	case ROTATEIDS_RIGHT:
-		_pObj->Position.x += 2;
+		if (_pObj->Position.x < 116)
+			_pObj->Position.x += 1;
 		break;
 	}
 }
