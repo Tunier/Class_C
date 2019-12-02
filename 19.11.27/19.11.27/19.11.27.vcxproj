@@ -125,6 +125,11 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\19.11.25\19.11.25\Enum.h" />
+    <ClInclude Include="..\..\19.11.25\19.11.25\Headers.h" />
+    <ClInclude Include="..\..\19.11.25\19.11.25\Struct.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
