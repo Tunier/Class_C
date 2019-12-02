@@ -55,6 +55,7 @@ void TargetRender(Object* _pObj);
 int main(void)
 {
 	Object* Player[128];
+	Object
 
 	for (int i = 0; i < 128; ++i)
 		Player[i] = (Object*)malloc(sizeof(Object));
@@ -349,8 +350,25 @@ void PlayerRender(Object* _Player[])
 //=> Target 초기화 내용을 작성함.
 void TargetInitialize(Object* _pObj)
 {
+	srand(time(NULL));
+		
+	int iTargetX = rand() % 110 + 1;
+	int iTargetY = rand() % 54 + 1;
+	
+	/*SetCursorPosition(
+		_pObj->Position.x = iTargetX,
+		_pObj->Position.y = iTargetY,
+		_pObj->pTexture = (char*)"●";
+	*/
+	_pObj->pTexture = (char*)"●";
+	
+	_pObj->Position.x = iTargetX;
+	_pObj->Position.y = iTargetY;
+	
+	_pObj->Scale.x = 2.f;
+	_pObj->Scale.y = 1.f;
+} 
 
-}
 
 //=> Target 변경사항에대한 코드를 작성함.
 void TargetProgress(Object* _pObj)
@@ -361,5 +379,8 @@ void TargetProgress(Object* _pObj)
 //=> Target 출력내용에대한 코드를 작성함.
 void TargetRender(Object* _pObj)
 {
-
+	SetCursorPosition(
+		_pObj->Position.x,
+		_pObj->Position.y,
+		_pObj->pTexture);
 }
