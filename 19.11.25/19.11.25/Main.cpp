@@ -12,13 +12,12 @@ int Length = 0;
 
 //** Manager ************************************************
 
-void SetScene(Object* _pPlayer[]);
-
+void SetScene(Object* _pPlayer[], Object* _pTarget);
 void SetCursorPosition(float _x, float _y, char* _pTexture);
 void InputKey(Object* _pObj);
 void SetDircetion(Object* _pObj);
 
-void Collision(Object* _Temp, Object* _Dest);
+void Collision(Object* _pPlayer[], Object* _pTarget);
 //***********************************************************
 
 
@@ -34,9 +33,9 @@ void MenuProgress();
 void MenuRender();
 
 //** Stage
-void StageInitialize(Object* _pPlayer[]);
-void StageProgress(Object* _pPlayer[]);
-void StageRender(Object* _pPlayer[]);
+void StageInitialize(Object* _pPlayer[], Object* _pTarget);
+void StageProgress(Object* _pPlayer[]); //, Object* _pObj);
+void StageRender(Object* _pPlayer[], Object* _pTarget);
 
 
 //** Player
@@ -46,23 +45,27 @@ void PlayerRender(Object* _pPlayer[]);
 
 
 //** Target
-void TargetInitialize(Object* _pObj);
-void TargetProgress(Object* _pObj);
-void TargetRender(Object* _pObj);
+void TargetInitialize(Object* _pTarget);
+void TargetProgress(Object* _pTarget);
+void TargetRender(Object* _pTarget);
 
 
 
 int main(void)
 {
 	Object* Player[128];
-	Object
+	Object* Target;
 
+	Target = (Object*)malloc(sizeof(Object));
+	
 	for (int i = 0; i < 128; ++i)
 		Player[i] = (Object*)malloc(sizeof(Object));
 
+
 	LogoInitialize();
 	MenuInitialize();
-	StageInitialize(Player);
+	StageInitialize(Player, Target);
+	
 
 	DWORD dwTime = GetTickCount();
 
@@ -74,7 +77,7 @@ int main(void)
 
 			system("cls");
 
-			SetScene(Player);
+			SetScene(Player, Target);
 		}
 	}
 
@@ -82,7 +85,7 @@ int main(void)
 }
 
 //=> 씬을 설정함.
-void SetScene(Object* _pPlayer[])
+void SetScene(Object* _pPlayer[], Object* _pTarget)
 {
 	switch (SceneState)
 	{
@@ -98,7 +101,7 @@ void SetScene(Object* _pPlayer[])
 
 	case SCENEIDS_STAGE:
 		StageProgress(_pPlayer);
-		StageRender(_pPlayer);
+		StageRender(_pPlayer, _pTarget);
 		break;
 
 	case SCENEIDS_EXIT:
@@ -165,9 +168,16 @@ void SetDircetion(Object* _pObj)
 }
 
 //=> 두개의 오브젝트가 충돌했는지 확인.
-void Collision(Object* _Temp, Object* _Dest)
+void Collision(Object* _Player[], Object* _Target)
 {
-
+	if (_Player[0]->Position.x - 1 == _Target->Position.x || _Player[0]->Position.x == _Target->Position.x || _Player[0]->Position.x + 1 == _Target->Position.x)
+	{
+		if (_Player[0]->Position.y = _Target->Position.y)
+		{
+			TargetRender;
+		}
+	}
+	
 }
 
 
@@ -214,22 +224,22 @@ void MenuRender()
 }
 
 //=> Stage 초기화 내용을 작성함.
-void StageInitialize(Object* _Player[])
+void StageInitialize(Object* _Player[], Object* _pTarget)
 {
 	PlayerInitialize(_Player);
-	//TargetInitialize(Object* _pObj);
+	TargetInitialize(_pTarget);
 }
 
 
 //=> Stage 변경사항에대한 코드를 작성함.
-void StageProgress(Object* _Player[])
+void StageProgress(Object* _Player[]) //Object* _pObj)
 {
 	PlayerProgress(_Player);
-	//TargetProgress(Object * _pObj);
+	//TargetProgress(_pObj);
 
 
 	//** 충돌 확인.
-	//void Collision(Object * _Temp, Object * _Dest);
+	//void Collision(Object* _Player[], Object* _Target);
 
 	if (GetAsyncKeyState(VK_SPACE))
 	{
@@ -241,10 +251,10 @@ void StageProgress(Object* _Player[])
 }
 
 //=> Stage 출력내용에대한 코드를 작성함.
-void StageRender(Object* _Player[])
+void StageRender(Object* _Player[], Object* _Target)
 {
 	//** Target 을 우선출력하고...
-	//TargetRender(Object * _pObj);
+	TargetRender(_Target);
 
 	//** Player 를 나중에 출력하여 Target의 출력물을 덮어버림. (Player와 Target을 같은 위치에 출력할때 플레이어가 보이게 하기위함.)
 	PlayerRender(_Player);
@@ -334,6 +344,7 @@ void PlayerRender(Object* _Player[])
 			_Player[i]->pTexture);
 	}
 
+	
 	for (int y = 0; y < 29; y++)
 	{
 		if (y == 0 || y == 28)
@@ -344,11 +355,12 @@ void PlayerRender(Object* _Player[])
 			SetCursorPosition(118.f, (float)y, (char*)"■");
 		}
 	}
+	
 }
 
 
 //=> Target 초기화 내용을 작성함.
-void TargetInitialize(Object* _pObj)
+void TargetInitialize(Object* _Target)
 {
 	srand(time(NULL));
 		
@@ -360,27 +372,30 @@ void TargetInitialize(Object* _pObj)
 		_pObj->Position.y = iTargetY,
 		_pObj->pTexture = (char*)"●";
 	*/
-	_pObj->pTexture = (char*)"●";
+	_Target->pTexture = (char*)"●";
 	
-	_pObj->Position.x = iTargetX;
-	_pObj->Position.y = iTargetY;
+	_Target->Position.x = iTargetX;
+	_Target->Position.y = iTargetY;
 	
-	_pObj->Scale.x = 2.f;
-	_pObj->Scale.y = 1.f;
+	_Target->Scale.x = 2.f;
+	_Target->Scale.y = 1.f;
+	
+	_Target->Rotate = 3;
 } 
 
 
 //=> Target 변경사항에대한 코드를 작성함.
-void TargetProgress(Object* _pObj)
+void TargetProgress(Object* _Target)
 {
 
 }
 
 //=> Target 출력내용에대한 코드를 작성함.
-void TargetRender(Object* _pObj)
+void TargetRender(Object* _Target)
 {
 	SetCursorPosition(
-		_pObj->Position.x,
-		_pObj->Position.y,
-		_pObj->pTexture);
+		_Target->Position.x,
+		_Target->Position.y,
+		_Target->pTexture);
+	
 }
