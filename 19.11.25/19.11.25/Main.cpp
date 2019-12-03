@@ -34,7 +34,7 @@ void MenuRender();
 
 //** Stage
 void StageInitialize(Object* _pPlayer[], Object* _pTarget);
-void StageProgress(Object* _pPlayer[]);//, Object* _pTarget);
+void StageProgress(Object* _pPlayer[], Object* _pTarget);
 void StageRender(Object* _pPlayer[], Object* _pTarget);
 
 
@@ -100,7 +100,7 @@ void SetScene(Object* _pPlayer[], Object* _pTarget)
 		break;
 
 	case SCENEIDS_STAGE:
-		StageProgress(_pPlayer);// , _pTarget);
+		StageProgress(_pPlayer, _pTarget);
 		StageRender(_pPlayer, _pTarget);
 		break;
 
@@ -168,13 +168,14 @@ void SetDircetion(Object* _pObj)
 }
 
 //=> 두개의 오브젝트가 충돌했는지 확인.
-void Collision(Object* _Player[], Object* _Target)
+void Collision(Object* _Player, Object* _Target)
 {
-	if (_Player[0]->Position.x - 1 == _Target->Position.x || _Player[0]->Position.x == _Target->Position.x || _Player[0]->Position.x + 1 == _Target->Position.x)
+	if (_Player->Position.x - 1 == _Target->Position.x || _Player->Position.x == _Target->Position.x || _Player->Position.x + 1 == _Target->Position.x)
 	{
-		if (_Player[0]->Position.y == _Target->Position.y)
+		if (_Player->Position.y == _Target->Position.y)
 		{
-			PlayerInitialize(_Player);
+			PlayerInitialize;
+			TargetRender;
 		}
 	}
 	
@@ -232,13 +233,13 @@ void StageInitialize(Object* _Player[], Object* _pTarget)
 
 
 //=> Stage 변경사항에대한 코드를 작성함.
-void StageProgress(Object* _Player[])//, Object* _Target)
+void StageProgress(Object* _Player[], Object* _Target)
 {
 	PlayerProgress(_Player);
-	//TargetProgress(_Target);
+	TargetProgress(_Target);
 
 	//** 충돌 확인.
-	//void Collision(Object* _Player[], Object* _Target);
+	void Collision(Object* _Player, Object* _Target);
 
 	
 	if (GetAsyncKeyState(VK_SPACE))
@@ -366,7 +367,7 @@ void TargetInitialize(Object* _Target)
 	srand(time(NULL));
 		
 	int iTargetX = rand() % 110 + 1;
-	int iTargetY = rand() % 54 + 1;
+	int iTargetY = rand() % 24 + 1;
 	
 	/*SetCursorPosition(
 		_pObj->Position.x = iTargetX,
