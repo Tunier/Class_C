@@ -34,7 +34,7 @@ void MenuRender();
 
 //** Stage
 void StageInitialize(Object* _pPlayer[], Object* _pTarget);
-void StageProgress(Object* _pPlayer[]); //, Object* _pObj);
+void StageProgress(Object* _pPlayer[]);//, Object* _pTarget);
 void StageRender(Object* _pPlayer[], Object* _pTarget);
 
 
@@ -100,7 +100,7 @@ void SetScene(Object* _pPlayer[], Object* _pTarget)
 		break;
 
 	case SCENEIDS_STAGE:
-		StageProgress(_pPlayer);
+		StageProgress(_pPlayer);// , _pTarget);
 		StageRender(_pPlayer, _pTarget);
 		break;
 
@@ -172,9 +172,9 @@ void Collision(Object* _Player[], Object* _Target)
 {
 	if (_Player[0]->Position.x - 1 == _Target->Position.x || _Player[0]->Position.x == _Target->Position.x || _Player[0]->Position.x + 1 == _Target->Position.x)
 	{
-		if (_Player[0]->Position.y = _Target->Position.y)
+		if (_Player[0]->Position.y == _Target->Position.y)
 		{
-			TargetRender;
+			PlayerInitialize(_Player);
 		}
 	}
 	
@@ -232,19 +232,20 @@ void StageInitialize(Object* _Player[], Object* _pTarget)
 
 
 //=> Stage 변경사항에대한 코드를 작성함.
-void StageProgress(Object* _Player[]) //Object* _pObj)
+void StageProgress(Object* _Player[])//, Object* _Target)
 {
 	PlayerProgress(_Player);
-	//TargetProgress(_pObj);
-
+	//TargetProgress(_Target);
 
 	//** 충돌 확인.
 	//void Collision(Object* _Player[], Object* _Target);
 
+	
 	if (GetAsyncKeyState(VK_SPACE))
 	{
 		PlayerInitialize(_Player);
 	}
+	
 
 	if (GetAsyncKeyState(VK_ESCAPE))
 		SceneState = SCENEIDS_EXIT;
