@@ -2,22 +2,26 @@
 
 
 #define HEAD 0
+#define MAX_SIZE_X 120
+#define MAX_SIZE_Y 30
+
 
 
 
 SCENEID SceneState = SCENEIDS_LOGO;
 
 int Length = 0;
-
+int Score = 0;
 
 //** Manager ************************************************
 
-void SetScene(Object* _pPlayer[], Object* _pTarget);
+void SetScene(Object* _pPlayer[], Object* _Target);
+
 void SetCursorPosition(float _x, float _y, char* _pTexture);
 void InputKey(Object* _pObj);
 void SetDircetion(Object* _pObj);
 
-void Collision(Object* _pPlayer[], Object* _pTarget);
+void Collision(Object* _Player[], Object* _Target);
 //***********************************************************
 
 
@@ -33,9 +37,9 @@ void MenuProgress();
 void MenuRender();
 
 //** Stage
-void StageInitialize(Object* _pPlayer[], Object* _pTarget);
-void StageProgress(Object* _pPlayer[], Object* _pTarget);
-void StageRender(Object* _pPlayer[], Object* _pTarget);
+void StageInitialize(Object* _pPlayer[], Object* _Target);
+void StageProgress(Object* _pPlayer[], Object* _Target);
+void StageRender(Object* _pPlayer[], Object* _Target);
 
 
 //** Player
@@ -56,22 +60,20 @@ int main(void)
 	Object* Player[128];
 	Object* Target;
 
-	Target = (Object*)malloc(sizeof(Object));
-	
 	for (int i = 0; i < 128; ++i)
 		Player[i] = (Object*)malloc(sizeof(Object));
 
+	Target = (Object*)malloc(sizeof(Object));
 
 	LogoInitialize();
 	MenuInitialize();
 	StageInitialize(Player, Target);
-	
 
 	DWORD dwTime = GetTickCount();
 
 	while (true)
 	{
-		if (dwTime + 100 < GetTickCount())
+		if (dwTime + 80 < GetTickCount())
 		{
 			dwTime = GetTickCount();
 
@@ -85,7 +87,7 @@ int main(void)
 }
 
 //=> 씬을 설정함.
-void SetScene(Object* _pPlayer[], Object* _pTarget)
+void SetScene(Object* _pPlayer[], Object* _Target)
 {
 	switch (SceneState)
 	{
@@ -100,14 +102,21 @@ void SetScene(Object* _pPlayer[], Object* _pTarget)
 		break;
 
 	case SCENEIDS_STAGE:
-		StageProgress(_pPlayer, _pTarget);
-		StageRender(_pPlayer, _pTarget);
+		StageProgress(_pPlayer, _Target);
+		StageRender(_pPlayer, _Target);
 		break;
 
 	case SCENEIDS_EXIT:
 		exit(NULL);
 		break;
 	}
+}
+
+void gotoxy(int x, int y)
+{
+	COORD pos = { x,y };
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
 
@@ -126,17 +135,21 @@ void SetCursorPosition(float _x, float _y, char* _pTexture)
 //=> 입력받은 화살표키의 ID값을 설정함.   (enum ROTATEIDS 원형 참고)
 void InputKey(Object* _pObj)
 {
-	if (GetAsyncKeyState(VK_UP))
-		_pObj->Rotate = ROTATEIDS_UP;
+	if (GetAsyncKeyState(VK_UP)) //** 위쪽방향 화살표키를 눌럿을때 
+		if (_pObj->Rotate != ROTATEIDS_DOWN)	//** 현재 방향이 아래쪽 방향이 아닐때에만
+			_pObj->Rotate = ROTATEIDS_UP;	//** 위쪽 방향키을 입력받을수 있다.
 
-	if (GetAsyncKeyState(VK_DOWN))
-		_pObj->Rotate = ROTATEIDS_DOWN;
+	if (GetAsyncKeyState(VK_DOWN)) //** 아래쪽방향 화살표키를 눌럿을때 
+		if (_pObj->Rotate != ROTATEIDS_UP)	//** 현재 방향이 위쪽 방향이 아닐때에만
+			_pObj->Rotate = ROTATEIDS_DOWN;	//** 아래쪽 방향키을 입력받을수 있다.
 
-	if (GetAsyncKeyState(VK_LEFT))
-		_pObj->Rotate = ROTATEIDS_LEFT;
+	if (GetAsyncKeyState(VK_LEFT))	//** 왼쪽방향 화살표키를 눌럿을때 
+		if (_pObj->Rotate != ROTATEIDS_RIGHT)	//** 현재 방향이 오른쪽 방향이 아닐때에만
+			_pObj->Rotate = ROTATEIDS_LEFT;	//** 왼쪽 방향키을 입력받을수 있다.
 
-	if (GetAsyncKeyState(VK_RIGHT))
-		_pObj->Rotate = ROTATEIDS_RIGHT;
+	if (GetAsyncKeyState(VK_RIGHT))	//** 오른쪽방향 화살표키를 눌럿을때 
+		if (_pObj->Rotate != ROTATEIDS_LEFT)	//** 현재 방향이 왼쪽 방향이 아닐때에만
+			_pObj->Rotate = ROTATEIDS_RIGHT;	//** 오른쪽 방향키을 입력받을수 있다.
 }
 
 
@@ -146,39 +159,59 @@ void SetDircetion(Object* _pObj)
 	switch (_pObj->Rotate)
 	{
 	case ROTATEIDS_UP:
-		if (_pObj->Position.y != 1)
+		//if (_pObj->Position.y != 1)
 			_pObj->Position.y -= 1;
 		break;
 
 	case ROTATEIDS_DOWN:
-		if (_pObj->Position.y != 27)
+		//if (_pObj->Position.y != (MAX_SIZE_Y -2))
 			_pObj->Position.y += 1;
 		break;
 
 	case ROTATEIDS_LEFT:
-		if (_pObj->Position.x > 2)
+		//if (_pObj->Position.x > 2)
 			_pObj->Position.x -= 2;
 		break;
 
 	case ROTATEIDS_RIGHT:
-		if (_pObj->Position.x < 116)
+		//if (_pObj->Position.x < (MAX_SIZE_X - 3))
 			_pObj->Position.x += 2;
 		break;
 	}
 }
 
 //=> 두개의 오브젝트가 충돌했는지 확인.
-void Collision(Object* _Player, Object* _Target)
+void Collision(Object* _Player[], Object* _Target)
 {
-	if (_Player->Position.x - 1 == _Target->Position.x || _Player->Position.x == _Target->Position.x || _Player->Position.x + 1 == _Target->Position.x)
+	if (_Player[HEAD]->Position.x < _Target->Position.x + _Target->Scale.x &&
+		_Target->Position.x < _Player[HEAD]->Position.x + _Player[HEAD]->Scale.x &&
+		_Player[HEAD]->Position.y == _Target->Position.y)
 	{
-		if (_Player->Position.y == _Target->Position.y)
-		{
-			PlayerInitialize;
-			TargetRender;
-		}
+		PlayerInitialize(_Player);
+		TargetInitialize(_Target);
+		Score += 1;
 	}
-	
+
+	if (_Player[HEAD]->Position.x <= 1 || _Player[HEAD]->Position.x + 1 >= MAX_SIZE_X ||
+		_Player[HEAD]->Position.y <= 1 || _Player[HEAD]->Position.y + 1 >= MAX_SIZE_Y)
+	{
+		SetCursorPosition(57, 15, (char*)"Game Over");
+		
+		system("pause");
+
+		SceneState = SCENEIDS_EXIT;
+	}
+
+	for(int i = 1; i < Length; ++i)
+		if (_Player[HEAD]->Position.x == _Player[i]->Position.x &&
+			_Player[HEAD]->Position.y == _Player[i]->Position.y)
+		{
+			SetCursorPosition(57, 15, (char*)"Game Over");
+
+			system("pause");
+
+			SceneState = SCENEIDS_EXIT;
+		}
 }
 
 
@@ -192,9 +225,7 @@ void LogoInitialize()
 void LogoProgress()
 {
 	if (GetAsyncKeyState('1'))
-	{
 		SceneState = SCENEIDS_MENU;
-	}
 }
 
 //=> Logo 출력내용에대한 코드를 작성함.
@@ -213,9 +244,7 @@ void MenuInitialize()
 void MenuProgress()
 {
 	if (GetAsyncKeyState('2'))
-	{
 		SceneState = SCENEIDS_STAGE;
-	}
 }
 
 //=> Menu 출력내용에대한 코드를 작성함.
@@ -225,10 +254,10 @@ void MenuRender()
 }
 
 //=> Stage 초기화 내용을 작성함.
-void StageInitialize(Object* _Player[], Object* _pTarget)
+void StageInitialize(Object* _Player[], Object* _Target)
 {
 	PlayerInitialize(_Player);
-	TargetInitialize(_pTarget);
+	TargetInitialize(_Target);
 }
 
 
@@ -239,14 +268,10 @@ void StageProgress(Object* _Player[], Object* _Target)
 	TargetProgress(_Target);
 
 	//** 충돌 확인.
-	void Collision(Object* _Player, Object* _Target);
+	Collision(_Player, _Target);
 
-	
 	if (GetAsyncKeyState(VK_SPACE))
-	{
 		PlayerInitialize(_Player);
-	}
-	
 
 	if (GetAsyncKeyState(VK_ESCAPE))
 		SceneState = SCENEIDS_EXIT;
@@ -265,50 +290,64 @@ void StageRender(Object* _Player[], Object* _Target)
 //=> 초기화 내용을 작성함.
 void PlayerInitialize(Object* _Player[])
 {
-	if (Length == 0)
+	//** 길이가 0 인 상태라면...
+	if (Length == HEAD)
 	{
-		_Player[Length]->pTexture = (char*)"■";
+		//** Head 부분을 아래 내용으로 초기화 함.
+		_Player[HEAD]->pTexture = (char*)"■";
 
-		_Player[Length]->Position.x = 59.f;
-		_Player[Length]->Position.y = 15.f;
+		_Player[HEAD]->Position.x = (MAX_SIZE_X / 2);
+		_Player[HEAD]->Position.y = (MAX_SIZE_Y / 2);
 
-		_Player[Length]->Scale.x = 2.f;
-		_Player[Length]->Scale.y = 1.f;
+		_Player[HEAD]->Scale.x = 2.f;
+		_Player[HEAD]->Scale.y = 1.f;
 
-		_Player[Length]->Rotate = 3;
+		_Player[HEAD]->Rotate = 0;
 	}
 	else
 	{
+		//** Head 부분을 제외한 나머지 부분을 꼬리로 보고 꼬리부분을 초기화 함.
 		_Player[Length]->pTexture = (char*)"□";
+
+		//** 현재 꼬리위치의 앞에있는 꼬리 방향을 받아 초기화 함.
 		_Player[Length]->Rotate = _Player[Length - 1]->Rotate;
 
+		//** 앞에있는 꼬리를 따라 
 		switch (_Player[Length]->Rotate)
 		{
 		case ROTATEIDS_UP:
+			//** UP 방향이면 아래쪽으로..
 			_Player[Length]->Position.x = _Player[Length - 1]->Position.x;
 			_Player[Length]->Position.y = _Player[Length - 1]->Position.y + 1;
 			break;
 
 		case ROTATEIDS_DOWN:
+			//** DOWN 방향이면 위쪽으로..
 			_Player[Length]->Position.x = _Player[Length - 1]->Position.x;
 			_Player[Length]->Position.y = _Player[Length - 1]->Position.y - 1;
 			break;
 
 		case ROTATEIDS_LEFT:
+			//** LEFT 방향이면 오른쪽으로..
 			_Player[Length]->Position.x = _Player[Length - 1]->Position.x + 2;
 			_Player[Length]->Position.y = _Player[Length - 1]->Position.y;
 			break;
 
 		case ROTATEIDS_RIGHT:
+			//** RIGHT 방향이면 왼쪽으로..
 			_Player[Length]->Position.x = _Player[Length - 1]->Position.x - 2;
 			_Player[Length]->Position.y = _Player[Length - 1]->Position.y;
 			break;
 		}
+		//** 초기화 함.
 
+
+		//** 크기값 설정.
 		_Player[Length]->Scale.x = 2.f;
 		_Player[Length]->Scale.y = 1.f;
 	}
 
+	//** 꼬리를 증가시켜줌.
 	++Length;
 }
 
@@ -319,12 +358,14 @@ void PlayerProgress(Object* _Player[])
 	//* 입력받은 키의 형태에 따라 방향을 ID 값으로 설정함.
 	InputKey(_Player[0]);
 
-	//** 설정된 ID 값으로 실제로 움직일 방향을 설정함.
-	SetDircetion(_Player[0]);
-
-	for (int i = (Length - 1); i > 0; --i)
+	//** 앞에있는 꼬리를 뒤에있는 꼬리가 계속 따라다닐수 있도록 설정.
+	for (int i = (Length - 1); i > HEAD; --i)
 	{
-		if (i != 0)
+		//** 앞에있는 꼬리의 정보를 뒤에있는 꼬리에게 전달하는데 전달 방식을 거꾸로 설정함.
+		//** (앞으로부터 전달하면 기존에 있던 데이터가 사라지기 때문..)
+
+		//** 거꾸로 오다보면 Index 가 0 일때에는 Head 부분이기 때문에 제외시켜줌. 
+		if (i != HEAD)
 		{
 			_Player[i]->Rotate = _Player[i - 1]->Rotate;
 
@@ -332,6 +373,9 @@ void PlayerProgress(Object* _Player[])
 			_Player[i]->Position.y = _Player[i - 1]->Position.y;
 		}
 	}
+
+	//** 설정된 ID 값으로 실제로 움직일 방향을 설정함.
+	SetDircetion(_Player[0]);
 }
 
 
@@ -346,58 +390,46 @@ void PlayerRender(Object* _Player[])
 			_Player[i]->pTexture);
 	}
 
-	
-	for (int y = 0; y < 29; y++)
+	for (int y = 1; y < MAX_SIZE_Y - 1; y++)
 	{
-		if (y == 0 || y == 28)
+		if (y == 1 || y == MAX_SIZE_Y - 2)
 			SetCursorPosition(0.f, (float)y, (char*)"■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 		else
 		{
 			SetCursorPosition(0.f, (float)y, (char*)"■");
-			SetCursorPosition(118.f, (float)y, (char*)"■");
+			SetCursorPosition((MAX_SIZE_X - 2), (float)y, (char*)"■");
 		}
 	}
-	
+	gotoxy(0, 0);
+	printf_s("%s %d", (char*)"Score : ", Score);		
 }
 
 
 //=> Target 초기화 내용을 작성함.
-void TargetInitialize(Object* _Target)
+void TargetInitialize(Object* _pTarget)
 {
-	srand(time(NULL));
-		
-	int iTargetX = rand() % 110 + 1;
-	int iTargetY = rand() % 24 + 1;
-	
-	/*SetCursorPosition(
-		_pObj->Position.x = iTargetX,
-		_pObj->Position.y = iTargetY,
-		_pObj->pTexture = (char*)"●";
-	*/
-	_Target->pTexture = (char*)"●";
-	
-	_Target->Position.x = iTargetX;
-	_Target->Position.y = iTargetY;
-	
-	_Target->Scale.x = 2.f;
-	_Target->Scale.y = 1.f;
-	
-	_Target->Rotate = 3;
-} 
+	_pTarget->Position.x = rand() % (MAX_SIZE_X - 5) + 3;
+	_pTarget->Position.y = rand() % (MAX_SIZE_Y - 3) + 1;
 
+	_pTarget->pTexture = (char*)"☆";
+
+	_pTarget->Scale.x = 2;
+	_pTarget->Scale.y = 1;
+
+	_pTarget->Rotate = 0;
+}
 
 //=> Target 변경사항에대한 코드를 작성함.
-void TargetProgress(Object* _Target)
+void TargetProgress(Object* _pTarget)
 {
 
 }
 
 //=> Target 출력내용에대한 코드를 작성함.
-void TargetRender(Object* _Target)
+void TargetRender(Object* _pTarget)
 {
 	SetCursorPosition(
-		_Target->Position.x,
-		_Target->Position.y,
-		_Target->pTexture);
-	
+		_pTarget->Position.x,
+		_pTarget->Position.y,
+		_pTarget->pTexture);
 }
