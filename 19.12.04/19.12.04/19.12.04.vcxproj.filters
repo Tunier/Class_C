@@ -13,24 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="헤더 파일\include">
-      <UniqueIdentifier>{978d7efb-e2e5-40c2-b9ae-7d4c278c0f7c}</UniqueIdentifier>
+    <Filter Include="헤더 파일\Include">
+      <UniqueIdentifier>{d887048c-4eba-4022-85f3-f924819c9f9e}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\19.11.25\19.11.25\Headers.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\19.11.25\19.11.25\Enum.h">
+      <Filter>헤더 파일\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\19.11.25\19.11.25\Struct.h">
+      <Filter>헤더 파일\Include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\19.11.25\19.11.25\Struct.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\19.11.25\19.11.25\Enum.h">
-      <Filter>헤더 파일\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\19.11.25\19.11.25\Headers.h">
-      <Filter>헤더 파일\include</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

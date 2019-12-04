@@ -120,7 +120,6 @@ void gotoxy(int x, int y)
 }
 
 
-
 //=> _x, _y 좌표에 _pTexture 를 출력함.
 void SetCursorPosition(float _x, float _y, char* _pTexture)
 {

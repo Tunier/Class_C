@@ -1,6 +1,6 @@
 #pragma once
 
-struct Vector3
+struct vector3
 {
 	float x, y;
 };
@@ -8,8 +8,8 @@ struct Vector3
 struct Object
 {
 	char* pTexture;
-	Vector3 Position;
-	Vector3 Scale;
-
+	vector3 Position;
+	vector3 Scale;
+	
 	int Rotate;
 };
