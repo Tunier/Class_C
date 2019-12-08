@@ -45,13 +45,13 @@ int main(void)
 	MenuInitialize();
 	StageInitialize(Player, Board);
 
-	DWORD dwTime = GetTickCount64();
+	DWORD dwTime = GetTickCount();
 
 	while (true)
 	{
-		if (dwTime + 500 < GetTickCount64())
+		if (dwTime + 150 < GetTickCount())
 		{
-			dwTime = GetTickCount64();
+			dwTime = GetTickCount();
 
 			system("cls");
 
@@ -59,7 +59,7 @@ int main(void)
 		}
 	}
 
-	
+
 	return 0;
 }
 
@@ -79,7 +79,7 @@ void SetScene(Object* _Player, Object* _Board)
 
 	case SCENEIDS_STAGE:
 		StageProgress(_Player);
-		//StageRender(_Player, _Board);
+		StageRender(_Player, _Board);
 		break;
 
 	case SCENEIDS_EXIT:
@@ -108,13 +108,13 @@ void SetCursorPosition(int _x, int _y, char* _pTexture)
 void InputKey(Object* _pObj)
 {
 	if (GetAsyncKeyState(VK_UP))
-		_pObj->Rotate = ROTATEIDS_UP;	
+		_pObj->Rotate = ROTATEIDS_UP;
 
 	if (GetAsyncKeyState(VK_DOWN))
-		_pObj->Rotate = ROTATEIDS_DOWN;	
+		_pObj->Rotate = ROTATEIDS_DOWN;
 
 	if (GetAsyncKeyState(VK_LEFT))
-		_pObj->Rotate = ROTATEIDS_LEFT;	
+		_pObj->Rotate = ROTATEIDS_LEFT;
 
 	if (GetAsyncKeyState(VK_RIGHT))
 		_pObj->Rotate = ROTATEIDS_RIGHT;
@@ -194,7 +194,7 @@ void StageInitialize(Object* _Player, Object* _Board)
 void StageProgress(Object* _Player)
 {
 	PlayerProgress(_Player);
-		
+
 	if (GetAsyncKeyState(VK_ESCAPE))
 		SceneState = SCENEIDS_EXIT;
 }
@@ -202,7 +202,7 @@ void StageProgress(Object* _Player)
 void StageRender(Object* _Player, Object* _Board)
 {
 	PlayerRender(_Player);
-	
+
 	BoardRender(_Board);
 }
 
@@ -217,7 +217,7 @@ void PlayerInitialize(Object* _Player)
 	_Player->Scale.y = 1;
 
 	_Player->Rotate = 0;
-	
+
 	_Player->Turn = TRUN_PLAYER1;
 }
 
@@ -226,7 +226,65 @@ void PlayerProgress(Object* _Player)
 	InputKey(_Player);
 
 	SetDircetion(_Player);
+	if (GetAsyncKeyState(VK_RETURN))
+	{
+		if (_Player->Turn == TRUN_PLAYER1)
+		{
+			if (_Player->Position.x == 10)
+			{
+				if (_Player->Position.y == 5)
+				{
+					printf_s();
+				}
+				else if (_Player->Position.y == 15)
+				{
+
+				}
+				else if (_Player->Position.y == 25)
+				{
+
+				}
+			}
+			else if (_Player->Position.x == 30)
+			{
+				if (_Player->Position.y == 5)
+				{
+
+				}
+				else if (_Player->Position.y == 15)
+				{
+
+				}
+				else if (_Player->Position.y == 25)
+				{
+
+				}
+			}
+			else if (_Player->Position.x == 50)
+			{
+				if (_Player->Position.y == 5)
+				{
+
+				}
+				else if (_Player->Position.y == 15)
+				{
+
+				}
+				else if (_Player->Position.y == 25)
+				{
+
+				}
+			}
+
+		}
+		else
+		{
+
+		}
+	}
+
 }
+
 
 void PlayerRender(Object* _Player)
 {
@@ -235,11 +293,6 @@ void PlayerRender(Object* _Player)
 		_Player->Position.y,
 		_Player->pTexture);
 
-	if (_Player->Turn == TRUN_PLAYER1)
-	{
-		if (GetAsyncKeyState(VK_RETURN))
-			SetCursorPosition(_Player->Position.x - 3, _Player->Position.y - 1, (char*)"¡á");
-	}
 }
 
 
@@ -249,22 +302,22 @@ void BoardInitialize(Object* _Board)
 }
 
 void BoardProgress(Object* _Board)
-{	   
-	   
-}	   
-	   
+{
+
+}
+
 void BoardRender(Object* _Board)
 {
 	for (int y = 0; y < MAX_SIZE_Y + 1; y++)
 	{
-		if (y == 0 || y == 10|| y == 20 || y == MAX_SIZE_Y )
+		if (y == 0 || y == 10 || y == 20 || y == MAX_SIZE_Y)
 			SetCursorPosition(0, y, (char*)"¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á¡á");
 		else
 		{
 			SetCursorPosition(0, y, (char*)"¡á");
 			SetCursorPosition(20, y, (char*)"¡á");
 			SetCursorPosition(40, y, (char*)"¡á");
-			SetCursorPosition((MAX_SIZE_X ), y, (char*)"¡á");
+			SetCursorPosition((MAX_SIZE_X), y, (char*)"¡á");
 		}
 	}
 }
