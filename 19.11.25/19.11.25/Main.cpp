@@ -127,7 +127,7 @@ void SetCursorPosition(float _x, float _y, char* _pTexture)
 
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 
-	printf_s("%s\n", _pTexture);
+	printf_s("%s\ns", _pTexture);
 }
 
 
@@ -298,8 +298,8 @@ void PlayerInitialize(Object* _Player[])
 		_Player[HEAD]->Position.x = (MAX_SIZE_X / 2);
 		_Player[HEAD]->Position.y = (MAX_SIZE_Y / 2);
 
-		_Player[HEAD]->Scale.x = 2.f;
-		_Player[HEAD]->Scale.y = 1.f;
+		_Player[HEAD]->Scale.x = 4.f;
+		_Player[HEAD]->Scale.y = 2.f;
 
 		_Player[HEAD]->Rotate = 0;
 	}
