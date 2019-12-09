@@ -5,6 +5,16 @@ SCENEID SceneState = SCENEIDS_LOGO;
 #define MAX_SIZE_X 60
 #define MAX_SIZE_Y 30
 
+int BLOCKAA = NEUTRALITY;
+int BLOCKAB = NEUTRALITY;
+int BLOCKAC = NEUTRALITY;
+int BLOCKBA = NEUTRALITY;
+int BLOCKBB = NEUTRALITY;
+int BLOCKBC = NEUTRALITY;
+int BLOCKCA = NEUTRALITY;
+int BLOCKCB = NEUTRALITY;
+int BLOCKCC = NEUTRALITY;
+
 void SetScene(Object* _Player, Object* _Board);
 
 void gotoxy(int x, int y);
@@ -88,9 +98,9 @@ void SetScene(Object* _Player, Object* _Board)
 	}
 }
 
-void gotoxy(int x, int y)
+void gotoxy(int _x, int _y)
 {
-	COORD pos = { x,y };
+	COORD pos = { _x, _y };
 
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
@@ -226,6 +236,7 @@ void PlayerProgress(Object* _Player)
 	InputKey(_Player);
 
 	SetDircetion(_Player);
+	
 	if (GetAsyncKeyState(VK_RETURN))
 	{
 		if (_Player->Turn == TRUN_PLAYER1)
@@ -234,52 +245,95 @@ void PlayerProgress(Object* _Player)
 			{
 				if (_Player->Position.y == 5)
 				{
-					printf_s();
+					int BLOCKAA = PLAYER1_MARK;
 				}
 				else if (_Player->Position.y == 15)
 				{
-
+					int BLOCKAB = PLAYER1_MARK;
 				}
 				else if (_Player->Position.y == 25)
 				{
-
+					int BLOCKAC = PLAYER1_MARK;
 				}
 			}
 			else if (_Player->Position.x == 30)
 			{
 				if (_Player->Position.y == 5)
 				{
-
+					int BLOCKBA = PLAYER1_MARK;
 				}
 				else if (_Player->Position.y == 15)
 				{
-
+					int BLOCKBB = PLAYER1_MARK;
 				}
 				else if (_Player->Position.y == 25)
 				{
-
+					int BLOCKBC = PLAYER1_MARK;
 				}
 			}
 			else if (_Player->Position.x == 50)
 			{
 				if (_Player->Position.y == 5)
 				{
-
+					int BLOCKCA = PLAYER1_MARK;
 				}
 				else if (_Player->Position.y == 15)
 				{
-
+					int BLOCKCB = PLAYER1_MARK;
 				}
 				else if (_Player->Position.y == 25)
 				{
-
+					int BLOCKCC = PLAYER1_MARK;
 				}
 			}
-
 		}
 		else
 		{
-
+			if (_Player->Position.x == 10)
+			{
+				if (_Player->Position.y == 5)
+				{
+					int BLOCKAA = PLAYER2_MARK;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					int BLOCKAB = PLAYER2_MARK;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					int BLOCKAC = PLAYER2_MARK;
+				}
+			}
+			else if (_Player->Position.x == 30)
+			{
+				if (_Player->Position.y == 5)
+				{
+					int BLOCKBA = PLAYER2_MARK;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					int BLOCKBB = PLAYER2_MARK;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					int BLOCKBC = PLAYER2_MARK;
+				}
+			}
+			else if (_Player->Position.x == 50)
+			{
+				if (_Player->Position.y == 5)
+				{
+					int BLOCKCA = PLAYER2_MARK;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					int BLOCKCB = PLAYER2_MARK;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					int BLOCKCC = PLAYER2_MARK;
+				}
+			}
 		}
 	}
 
@@ -293,17 +347,32 @@ void PlayerRender(Object* _Player)
 		_Player->Position.y,
 		_Player->pTexture);
 
+	if (BLOCKAA == PLAYER1_MARK)
+	{
+		gotoxy(_Player->Position.x, _Player->Position.y);
+		printf_s();
+		
+		gotoxy(_Player->Position.x, _Player->Position.y);
+		printf_s();
+
+		gotoxy(_Player->Position.x, _Player->Position.y);
+		printf_s();
+
+		gotoxy(_Player->Position.x, _Player->Position.y);
+		printf_s();ww
+	}
+
 }
 
 
 void BoardInitialize(Object* _Board)
 {
-
+	
 }
 
 void BoardProgress(Object* _Board)
 {
-
+	
 }
 
 void BoardRender(Object* _Board)

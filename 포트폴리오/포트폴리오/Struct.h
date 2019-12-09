@@ -14,3 +14,4 @@ struct Object
 	int Rotate;
 	int Turn;
 };
+
