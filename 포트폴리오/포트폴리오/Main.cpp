@@ -15,6 +15,8 @@ int BLOCKCA = NEUTRALITY;
 int BLOCKCB = NEUTRALITY;
 int BLOCKCC = NEUTRALITY;
 
+int Turn = TRUN_PLAYER1;
+
 void SetScene(Object* _Player, Object* _Board);
 
 void gotoxy(int x, int y);
@@ -42,14 +44,21 @@ void BoardInitialize(Object* _Board);
 void BoardProgress(Object* _Board);
 void BoardRender(Object* _Board);
 
+void MarkPlayer1(Vector* _MarkLocation);
+void MarkPlayer2(Vector* _MarkLocation);
 
 int main(void)
 {
 	Object* Player;
 	Object* Board;
 
+	Vector* MarkLocation[9];
+
 	Player = (Object*)malloc(sizeof(Object));
 	Board = (Object*)malloc(sizeof(Object));
+
+	for (int i = 0; i < 9; ++i)
+		MarkLocation[9] = (Vector*)malloc(sizeof(Vector));
 
 	LogoInitialize();
 	MenuInitialize();
@@ -175,8 +184,7 @@ void LogoProgress()
 
 void LogoRender()
 {
-	SetCursorPosition(53, 13, (char*)"Logo");
-	SetCursorPosition(49, 15, (char*)"Need 2 Players");
+	SetCursorPosition(57, 17, (char*)"Logo");
 }
 
 void MenuInitialize()
@@ -192,7 +200,7 @@ void MenuProgress()
 
 void MenuRender()
 {
-	SetCursorPosition(57, 15, (char*)"Menu");
+	SetCursorPosition(57, 17, (char*)"Menu");
 }
 
 void StageInitialize(Object* _Player, Object* _Board)
@@ -220,15 +228,13 @@ void PlayerInitialize(Object* _Player)
 {
 	_Player->pTexture = (char*)"__";
 
-	_Player->Position.x = (MAX_SIZE_X / 2);
-	_Player->Position.y = (MAX_SIZE_Y / 2);
+	_Player->Position.x = 30;
+	_Player->Position.y = 15;
 
 	_Player->Scale.x = 2;
 	_Player->Scale.y = 1;
 
-	_Player->Rotate = 0;
-
-	_Player->Turn = TRUN_PLAYER1;
+	_Player->Rotate = ROTATEIDS_NEUTRALITY;
 }
 
 void PlayerProgress(Object* _Player)
@@ -236,108 +242,148 @@ void PlayerProgress(Object* _Player)
 	InputKey(_Player);
 
 	SetDircetion(_Player);
-	
-	if (GetAsyncKeyState(VK_RETURN))
+
+	if (SceneState == SCENEIDS_STAGE)
 	{
-		if (_Player->Turn == TRUN_PLAYER1)
+		if (GetAsyncKeyState(VK_SPACE))
 		{
-			if (_Player->Position.x == 10)
+			if (Turn == TRUN_PLAYER1)
 			{
-				if (_Player->Position.y == 5)
+				if (_Player->Position.x == 10)
 				{
-					int BLOCKAA = PLAYER1_MARK;
+					if (_Player->Position.y == 5)
+					{
+						BLOCKAA = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.x = 30;
+					}
+					else if (_Player->Position.y == 15)
+					{
+						BLOCKAB = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.x = 30;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						BLOCKAC = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.x = 30;
+					}
 				}
-				else if (_Player->Position.y == 15)
+				else if (_Player->Position.x == 30)
 				{
-					int BLOCKAB = PLAYER1_MARK;
+					if (_Player->Position.y == 5)
+					{
+						BLOCKBA = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.x = 50;
+					}
+					else if (_Player->Position.y == 15)
+					{
+						BLOCKBB = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.x = 50;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						BLOCKBC = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.x = 50;
+					}
 				}
-				else if (_Player->Position.y == 25)
+				else if (_Player->Position.x == 50)
 				{
-					int BLOCKAC = PLAYER1_MARK;
+					if (_Player->Position.y == 5)
+					{
+						BLOCKCA = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.y = 15;
+					}
+					else if (_Player->Position.y == 15)
+					{
+						BLOCKCB = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.y = 25;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						BLOCKCC = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
+						//_Player->Position.y = 15;
+					}
 				}
 			}
-			else if (_Player->Position.x == 30)
+			else if (Turn == TRUN_PLAYER2)
 			{
-				if (_Player->Position.y == 5)
+				if (_Player->Position.x == 10)
 				{
-					int BLOCKBA = PLAYER1_MARK;
+					if (_Player->Position.y == 5)
+					{
+						BLOCKAA = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.x = 30;
+					}
+					else if (_Player->Position.y == 15)
+					{
+						BLOCKAB = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.x = 30;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						BLOCKAC = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.x = 30;
+					}
 				}
-				else if (_Player->Position.y == 15)
+				else if (_Player->Position.x == 30)
 				{
-					int BLOCKBB = PLAYER1_MARK;
+					if (_Player->Position.y == 5)
+					{
+						BLOCKBA = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.x = 50;
+					}
+					else if (_Player->Position.y == 15)
+					{
+						BLOCKBB = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.x = 50;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						BLOCKBC = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.x = 50;
+					}
 				}
-				else if (_Player->Position.y == 25)
+				else if (_Player->Position.x == 50)
 				{
-					int BLOCKBC = PLAYER1_MARK;
-				}
-			}
-			else if (_Player->Position.x == 50)
-			{
-				if (_Player->Position.y == 5)
-				{
-					int BLOCKCA = PLAYER1_MARK;
-				}
-				else if (_Player->Position.y == 15)
-				{
-					int BLOCKCB = PLAYER1_MARK;
-				}
-				else if (_Player->Position.y == 25)
-				{
-					int BLOCKCC = PLAYER1_MARK;
-				}
-			}
-		}
-		else
-		{
-			if (_Player->Position.x == 10)
-			{
-				if (_Player->Position.y == 5)
-				{
-					int BLOCKAA = PLAYER2_MARK;
-				}
-				else if (_Player->Position.y == 15)
-				{
-					int BLOCKAB = PLAYER2_MARK;
-				}
-				else if (_Player->Position.y == 25)
-				{
-					int BLOCKAC = PLAYER2_MARK;
-				}
-			}
-			else if (_Player->Position.x == 30)
-			{
-				if (_Player->Position.y == 5)
-				{
-					int BLOCKBA = PLAYER2_MARK;
-				}
-				else if (_Player->Position.y == 15)
-				{
-					int BLOCKBB = PLAYER2_MARK;
-				}
-				else if (_Player->Position.y == 25)
-				{
-					int BLOCKBC = PLAYER2_MARK;
-				}
-			}
-			else if (_Player->Position.x == 50)
-			{
-				if (_Player->Position.y == 5)
-				{
-					int BLOCKCA = PLAYER2_MARK;
-				}
-				else if (_Player->Position.y == 15)
-				{
-					int BLOCKCB = PLAYER2_MARK;
-				}
-				else if (_Player->Position.y == 25)
-				{
-					int BLOCKCC = PLAYER2_MARK;
+					if (_Player->Position.y == 5)
+					{
+						BLOCKCA = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.y = 15;
+					}
+					else if (_Player->Position.y == 15)
+					{
+						BLOCKCB = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.y = 25;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						BLOCKCC = PLAYER2_MARK;
+						Turn = TRUN_PLAYER1;
+						//_Player->Position.y = 15;
+					}
 				}
 			}
 		}
 	}
-
 }
+
+
 
 
 void PlayerRender(Object* _Player)
@@ -349,30 +395,28 @@ void PlayerRender(Object* _Player)
 
 	if (BLOCKAA == PLAYER1_MARK)
 	{
-		gotoxy(_Player->Position.x, _Player->Position.y);
-		printf_s();
 		
-		gotoxy(_Player->Position.x, _Player->Position.y);
-		printf_s();
-
-		gotoxy(_Player->Position.x, _Player->Position.y);
-		printf_s();
-
-		gotoxy(_Player->Position.x, _Player->Position.y);
-		printf_s();ww
+	}
+	else if (BLOCKAA == PLAYER2_MARK)
+	{
+		
 	}
 
+	if (BLOCKAB == PLAYER1_MARK)
+	{
+		
+	}
 }
 
 
 void BoardInitialize(Object* _Board)
 {
-	
+
 }
 
 void BoardProgress(Object* _Board)
 {
-	
+
 }
 
 void BoardRender(Object* _Board)
@@ -389,4 +433,49 @@ void BoardRender(Object* _Board)
 			SetCursorPosition((MAX_SIZE_X), y, (char*)"бс");
 		}
 	}
+}
+
+void MarkPlayer1(Vector* _MarkLocation[])
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		_MarkLocation[i] =
+	}
+
+		
+	
+	gotoxy(8 + 20 * XLocation, 3 * YLocation);
+	printf_s("%s", "бсбсбс");
+
+	for (int y = 4; y < 6 + 1; ++y)
+	{
+		for (int x = 6; x < 14 + 1; ++x)
+		{
+			if (x == 6 || x == 14)
+			{
+				SetCursorPosition(x, y, (char*)"бс");
+			}
+		}
+	}
+
+	gotoxy(8, 7);
+	printf_s("%s", "бсбсбс");
+}
+
+void MarkPlayer2(Vector* _MarkLocation[])
+{
+	gotoxy(6, 3);
+	printf_s("%s", "бс      бс");
+
+	gotoxy(8, 4);
+	printf_s("%s", "бс  бс");
+
+	gotoxy(10, 5);
+	printf_s("%s", "бс");
+
+	gotoxy(8, 6);
+	printf_s("%s", "бс  бс");
+
+	gotoxy(6, 7);
+	printf_s("%s", "бс      бс");
 }

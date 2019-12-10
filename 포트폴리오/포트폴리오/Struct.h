@@ -12,6 +12,5 @@ struct Object
 	Vector Scale;
 
 	int Rotate;
-	int Turn;
 };
 
