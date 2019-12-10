@@ -16,6 +16,7 @@ int BLOCKCB = NEUTRALITY;
 int BLOCKCC = NEUTRALITY;
 
 int Turn = TRUN_PLAYER1;
+int Match = NOT_YET;
 
 void SetScene(Object* _Player, Object* _Board);
 
@@ -33,7 +34,7 @@ void MenuProgress();
 void MenuRender();
 
 void StageInitialize(Object* _Player, Object* _Board);
-void StageProgress(Object* _Player);
+void StageProgress(Object* _Player, Object* _Board);
 void StageRender(Object* _Player, Object* _Board);
 
 void PlayerInitialize(Object* _Player);
@@ -44,21 +45,16 @@ void BoardInitialize(Object* _Board);
 void BoardProgress(Object* _Board);
 void BoardRender(Object* _Board);
 
-void MarkPlayer1(Vector* _MarkLocation);
-void MarkPlayer2(Vector* _MarkLocation);
+void MarkPlayer1(int MarkLocationX, int MarkLocationY);
+void MarkPlayer2(int MarkLocationX, int MarkLocationY);
 
 int main(void)
 {
 	Object* Player;
 	Object* Board;
 
-	Vector* MarkLocation[9];
-
 	Player = (Object*)malloc(sizeof(Object));
 	Board = (Object*)malloc(sizeof(Object));
-
-	for (int i = 0; i < 9; ++i)
-		MarkLocation[9] = (Vector*)malloc(sizeof(Vector));
 
 	LogoInitialize();
 	MenuInitialize();
@@ -97,7 +93,7 @@ void SetScene(Object* _Player, Object* _Board)
 		break;
 
 	case SCENEIDS_STAGE:
-		StageProgress(_Player);
+		StageProgress(_Player, _Board);
 		StageRender(_Player, _Board);
 		break;
 
@@ -209,9 +205,10 @@ void StageInitialize(Object* _Player, Object* _Board)
 	BoardInitialize(_Board);
 }
 
-void StageProgress(Object* _Player)
+void StageProgress(Object* _Player, Object* _Board)
 {
 	PlayerProgress(_Player);
+	BoardProgress(_Board);
 
 	if (GetAsyncKeyState(VK_ESCAPE))
 		SceneState = SCENEIDS_EXIT;
@@ -242,7 +239,7 @@ void PlayerProgress(Object* _Player)
 	InputKey(_Player);
 
 	SetDircetion(_Player);
-
+	
 	if (SceneState == SCENEIDS_STAGE)
 	{
 		if (GetAsyncKeyState(VK_SPACE))
@@ -253,19 +250,28 @@ void PlayerProgress(Object* _Player)
 				{
 					if (_Player->Position.y == 5)
 					{
-						BLOCKAA = PLAYER1_MARK;
+						if (BLOCKAA == NEUTRALITY)
+						{
+							BLOCKAA = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.x = 30;
 					}
 					else if (_Player->Position.y == 15)
 					{
-						BLOCKAB = PLAYER1_MARK;
+						if (BLOCKAB == NEUTRALITY)
+						{
+							BLOCKAB = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.x = 30;
 					}
 					else if (_Player->Position.y == 25)
 					{
-						BLOCKAC = PLAYER1_MARK;
+						if (BLOCKAC == NEUTRALITY)
+						{
+							BLOCKAC = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.x = 30;
 					}
@@ -274,19 +280,28 @@ void PlayerProgress(Object* _Player)
 				{
 					if (_Player->Position.y == 5)
 					{
-						BLOCKBA = PLAYER1_MARK;
+						if (BLOCKBA == NEUTRALITY)
+						{
+							BLOCKBA = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.x = 50;
 					}
 					else if (_Player->Position.y == 15)
 					{
-						BLOCKBB = PLAYER1_MARK;
+						if (BLOCKBB == NEUTRALITY)
+						{
+							BLOCKBB = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.x = 50;
 					}
 					else if (_Player->Position.y == 25)
 					{
-						BLOCKBC = PLAYER1_MARK;
+						if (BLOCKBC == NEUTRALITY)
+						{
+							BLOCKBC = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.x = 50;
 					}
@@ -295,19 +310,28 @@ void PlayerProgress(Object* _Player)
 				{
 					if (_Player->Position.y == 5)
 					{
-						BLOCKCA = PLAYER1_MARK;
+						if (BLOCKCA == NEUTRALITY)
+						{
+							BLOCKCA = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.y = 15;
 					}
 					else if (_Player->Position.y == 15)
 					{
-						BLOCKCB = PLAYER1_MARK;
+						if (BLOCKCB == NEUTRALITY)
+						{
+							BLOCKCB = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.y = 25;
 					}
 					else if (_Player->Position.y == 25)
 					{
-						BLOCKCC = PLAYER1_MARK;
+						if (BLOCKCC == NEUTRALITY)
+						{
+							BLOCKCC = PLAYER1_MARK;
+						}
 						Turn = TRUN_PLAYER2;
 						//_Player->Position.y = 15;
 					}
@@ -319,19 +343,28 @@ void PlayerProgress(Object* _Player)
 				{
 					if (_Player->Position.y == 5)
 					{
-						BLOCKAA = PLAYER2_MARK;
+						if (BLOCKAA == NEUTRALITY)
+						{
+							BLOCKAA = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.x = 30;
 					}
 					else if (_Player->Position.y == 15)
 					{
-						BLOCKAB = PLAYER2_MARK;
+						if (BLOCKAB == NEUTRALITY)
+						{
+							BLOCKAB = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.x = 30;
 					}
 					else if (_Player->Position.y == 25)
 					{
-						BLOCKAC = PLAYER2_MARK;
+						if (BLOCKAC == NEUTRALITY)
+						{
+							BLOCKAC = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.x = 30;
 					}
@@ -340,19 +373,28 @@ void PlayerProgress(Object* _Player)
 				{
 					if (_Player->Position.y == 5)
 					{
-						BLOCKBA = PLAYER2_MARK;
+						if (BLOCKBA == NEUTRALITY)
+						{
+							BLOCKBA = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.x = 50;
 					}
 					else if (_Player->Position.y == 15)
 					{
-						BLOCKBB = PLAYER2_MARK;
+						if (BLOCKBB == NEUTRALITY)
+						{
+							BLOCKBB = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.x = 50;
 					}
 					else if (_Player->Position.y == 25)
 					{
-						BLOCKBC = PLAYER2_MARK;
+						if (BLOCKBC == NEUTRALITY)
+						{
+							BLOCKBC = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.x = 50;
 					}
@@ -361,19 +403,28 @@ void PlayerProgress(Object* _Player)
 				{
 					if (_Player->Position.y == 5)
 					{
-						BLOCKCA = PLAYER2_MARK;
+						if (BLOCKCA == NEUTRALITY)
+						{
+							BLOCKCA = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.y = 15;
 					}
 					else if (_Player->Position.y == 15)
 					{
-						BLOCKCB = PLAYER2_MARK;
+						if (BLOCKCB == NEUTRALITY)
+						{
+							BLOCKCB = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.y = 25;
 					}
 					else if (_Player->Position.y == 25)
 					{
-						BLOCKCC = PLAYER2_MARK;
+						if (BLOCKCC == NEUTRALITY)
+						{
+							BLOCKCC = PLAYER2_MARK;
+						}
 						Turn = TRUN_PLAYER1;
 						//_Player->Position.y = 15;
 					}
@@ -383,31 +434,13 @@ void PlayerProgress(Object* _Player)
 	}
 }
 
-
-
-
 void PlayerRender(Object* _Player)
 {
 	SetCursorPosition(
 		_Player->Position.x,
 		_Player->Position.y,
 		_Player->pTexture);
-
-	if (BLOCKAA == PLAYER1_MARK)
-	{
-		
-	}
-	else if (BLOCKAA == PLAYER2_MARK)
-	{
-		
-	}
-
-	if (BLOCKAB == PLAYER1_MARK)
-	{
-		
-	}
 }
-
 
 void BoardInitialize(Object* _Board)
 {
@@ -416,7 +449,119 @@ void BoardInitialize(Object* _Board)
 
 void BoardProgress(Object* _Board)
 {
-
+	//** 플레이어1 승리판정
+	if (BLOCKAA == PLAYER1_MARK)
+	{
+		if (BLOCKAB == PLAYER1_MARK)
+		{
+			if (BLOCKAC == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+		else if (BLOCKBA == PLAYER1_MARK)
+		{
+			if (BLOCKCA == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+		else if (BLOCKBB == PLAYER1_MARK)
+		{
+			if (BLOCKCC == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+	}
+	if (BLOCKBA == PLAYER1_MARK)
+	{
+		if (BLOCKBB == PLAYER1_MARK)
+		{
+			if (BLOCKBC == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+	}
+	if (BLOCKCA == PLAYER1_MARK)
+	{
+		if (BLOCKCB == PLAYER1_MARK)
+		{
+			if (BLOCKCC == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+		else if (BLOCKBB == PLAYER1_MARK)
+		{
+			if (BLOCKAC == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+	}
+	if (BLOCKAB == PLAYER1_MARK)
+	{
+		if (BLOCKBB == PLAYER1_MARK)
+		{
+			if (BLOCKCB == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+	}
+	if (BLOCKAC == PLAYER1_MARK)
+	{
+		if (BLOCKBC == PLAYER1_MARK)
+		{
+			if (BLOCKCC == PLAYER1_MARK)
+				Match = PLAYER1_WIN;
+		}
+	}
+	
+	//**** 이하 플레이어2 승리 판정
+	if (BLOCKAA == PLAYER2_MARK)
+	{
+		if (BLOCKAB == PLAYER2_MARK)
+		{
+			if (BLOCKAC == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+		else if (BLOCKBA == PLAYER2_MARK)
+		{
+			if (BLOCKCA == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+		else if (BLOCKBB == PLAYER2_MARK)
+		{
+			if (BLOCKCC == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+	}
+	if (BLOCKBA == PLAYER2_MARK)
+	{
+		if (BLOCKBB == PLAYER2_MARK)
+		{
+			if (BLOCKBC == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+	}
+	if (BLOCKCA == PLAYER2_MARK)
+	{
+		if (BLOCKCB == PLAYER2_MARK)
+		{
+			if (BLOCKCC == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+		else if (BLOCKBB == PLAYER2_MARK)
+		{
+			if (BLOCKAC == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+	}
+	if (BLOCKAB == PLAYER2_MARK)
+	{
+		if (BLOCKBB == PLAYER2_MARK)
+		{
+			if (BLOCKCB == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+	}
+	if (BLOCKAC == PLAYER2_MARK)
+	{
+		if (BLOCKBC == PLAYER2_MARK)
+		{
+			if (BLOCKCC == PLAYER2_MARK)
+				Match = PLAYER2_WIN;
+		}
+	}
 }
 
 void BoardRender(Object* _Board)
@@ -433,49 +578,179 @@ void BoardRender(Object* _Board)
 			SetCursorPosition((MAX_SIZE_X), y, (char*)"■");
 		}
 	}
+	if (SceneState == SCENEIDS_STAGE)
+	{
+		if (BLOCKAA == PLAYER1_MARK)
+		{
+			MarkPlayer1(0, 0);
+		}
+		else if (BLOCKAA == PLAYER2_MARK)
+		{
+			MarkPlayer2(0, 0);
+		}
+		if (BLOCKAB == PLAYER1_MARK)
+		{
+			MarkPlayer1(0, 1);
+		}
+		else if (BLOCKAB == PLAYER2_MARK)
+		{
+			MarkPlayer2(0, 1);
+		}
+		if (BLOCKAC == PLAYER1_MARK)
+		{
+			MarkPlayer1(0, 2);
+		}
+		else if (BLOCKAC == PLAYER2_MARK)
+		{
+			MarkPlayer2(0, 2);
+		}
+
+		if (BLOCKBA == PLAYER1_MARK)
+		{
+			MarkPlayer1(1, 0);
+		}
+		else if (BLOCKBA == PLAYER2_MARK)
+		{
+			MarkPlayer2(1, 0);
+		}
+		if (BLOCKBB == PLAYER1_MARK)
+		{
+			MarkPlayer1(1, 1);
+		}
+		else if (BLOCKBB == PLAYER2_MARK)
+		{
+			MarkPlayer2(1, 1);
+		}
+		if (BLOCKBC == PLAYER1_MARK)
+		{
+			MarkPlayer1(1, 2);
+		}
+		else if (BLOCKBC == PLAYER2_MARK)
+		{
+			MarkPlayer2(1, 2);
+		}
+
+		if (BLOCKCA == PLAYER1_MARK)
+		{
+			MarkPlayer1(2, 0);
+		}
+		else if (BLOCKCA == PLAYER2_MARK)
+		{
+			MarkPlayer2(2, 0);
+		}
+		if (BLOCKCB == PLAYER1_MARK)
+		{
+			MarkPlayer1(2, 1);
+		}
+		else if (BLOCKCB == PLAYER2_MARK)
+		{
+			MarkPlayer2(2, 1);
+		}
+		if (BLOCKCC == PLAYER1_MARK)
+		{
+			MarkPlayer1(2, 2);
+		}
+		else if (BLOCKCC == PLAYER2_MARK)
+		{
+			MarkPlayer2(2, 2);
+		}
+	}
+	if (Match == PLAYER1_WIN)
+	{
+		system("cls");
+		SetCursorPosition(57, 17, (char*)"Player1 Win!");
+		SetCursorPosition(57, 18, (char*)"게임을 종료하려면 ESC키를, 매뉴로 가시려면 3키를 누르세요.");
+		system("pause");
+		if (GetAsyncKeyState(VK_ESCAPE))
+			SceneState = SCENEIDS_EXIT;
+		if (GetAsyncKeyState(3))
+			system("cls");
+			BLOCKAA = NEUTRALITY;
+			BLOCKAB = NEUTRALITY;
+			BLOCKAC = NEUTRALITY;
+			BLOCKBA = NEUTRALITY;
+			BLOCKBB = NEUTRALITY;
+			BLOCKBC = NEUTRALITY;
+			BLOCKCA = NEUTRALITY;
+			BLOCKCB = NEUTRALITY;
+			BLOCKCC = NEUTRALITY;
+			Turn = TRUN_PLAYER1;
+			Match = NOT_YET;
+			SceneState = SCENEIDS_MENU;
+			
+	}
+	else if (Match == PLAYER2_WIN)
+	{
+		system("cls");
+		SetCursorPosition(57, 17, (char*)"Player2 Win!");
+		SetCursorPosition(57, 18, (char*)"게임을 종료하려면 ESC키를, 매뉴로 가시려면 3키를 누르세요.");
+		system("pause");
+		if (GetAsyncKeyState(VK_ESCAPE))
+			SceneState = SCENEIDS_EXIT;
+		if (GetAsyncKeyState(3))
+			system("cls");
+			BLOCKAA = NEUTRALITY;
+			BLOCKAB = NEUTRALITY;
+			BLOCKAC = NEUTRALITY;
+			BLOCKBA = NEUTRALITY;
+			BLOCKBB = NEUTRALITY;
+			BLOCKBC = NEUTRALITY;
+			BLOCKCA = NEUTRALITY;
+			BLOCKCB = NEUTRALITY;
+			BLOCKCC = NEUTRALITY;
+			Turn = TRUN_PLAYER1;
+			Match = NOT_YET;
+			SceneState = SCENEIDS_MENU;
+	}
+	
 }
 
-void MarkPlayer1(Vector* _MarkLocation[])
+void MarkPlayer1(int MarkLocationX, int MarkLocationY)
 {
-	for (int i = 0; i < 9; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
-		_MarkLocation[i] =
+		MarkLocation[i].x = 8 + 20 * i;
+		MarkLocation[i].y = 3 + 10 * i;
 	}
 
-		
-	
-	gotoxy(8 + 20 * XLocation, 3 * YLocation);
+	gotoxy(MarkLocation[MarkLocationX].x, MarkLocation[MarkLocationY].y);
 	printf_s("%s", "■■■");
 
-	for (int y = 4; y < 6 + 1; ++y)
+	for (int y = MarkLocation[MarkLocationY].y + 1; y < MarkLocation[MarkLocationY].y + 4; ++y)
 	{
-		for (int x = 6; x < 14 + 1; ++x)
+		for (int x = MarkLocation[MarkLocationX].x - 2; x < MarkLocation[MarkLocationX].x + 7; ++x)
 		{
-			if (x == 6 || x == 14)
+			if (x == MarkLocation[MarkLocationX].x - 2 || x == MarkLocation[MarkLocationX].x + 6)
 			{
 				SetCursorPosition(x, y, (char*)"■");
 			}
 		}
 	}
 
-	gotoxy(8, 7);
+	gotoxy(MarkLocation[MarkLocationX].x, MarkLocation[MarkLocationY].y + 4);
 	printf_s("%s", "■■■");
 }
 
-void MarkPlayer2(Vector* _MarkLocation[])
+void MarkPlayer2(int MarkLocationX, int MarkLocationY)
 {
-	gotoxy(6, 3);
+	for (int i = 0; i < 3; ++i)
+	{
+		MarkLocation[i].x = 10 + 20 * i;
+		MarkLocation[i].y = 5 + 10 * i;
+	}
+
+	gotoxy(MarkLocation[MarkLocationX].x - 4, MarkLocation[MarkLocationY].y - 2);
 	printf_s("%s", "■      ■");
 
-	gotoxy(8, 4);
+	gotoxy(MarkLocation[MarkLocationX].x - 2, MarkLocation[MarkLocationY].y - 1);
 	printf_s("%s", "■  ■");
 
-	gotoxy(10, 5);
+	gotoxy(MarkLocation[MarkLocationX].x, MarkLocation[MarkLocationY].y);
 	printf_s("%s", "■");
 
-	gotoxy(8, 6);
+	gotoxy(MarkLocation[MarkLocationX].x - 2, MarkLocation[MarkLocationY].y + 1);
 	printf_s("%s", "■  ■");
 
-	gotoxy(6, 7);
+	gotoxy(MarkLocation[MarkLocationX].x - 4, MarkLocation[MarkLocationY].y + 2);
 	printf_s("%s", "■      ■");
 }

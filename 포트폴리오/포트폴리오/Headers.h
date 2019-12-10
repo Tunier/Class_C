@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <Windows.h>
 #include <time.h>
+#include <signal.h>
 
 #include "Struct.h"
 #include "Enum.h"

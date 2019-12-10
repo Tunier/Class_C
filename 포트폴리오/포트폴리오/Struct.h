@@ -1,5 +1,6 @@
 #pragma once
 
+
 struct Vector
 {
 	int x, y;
@@ -14,3 +15,4 @@ struct Object
 	int Rotate;
 };
 
+Vector MarkLocation[3];
