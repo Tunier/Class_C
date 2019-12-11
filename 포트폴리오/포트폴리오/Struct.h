@@ -1,10 +1,11 @@
 #pragma once
 
-
 struct Vector
 {
 	int x, y;
 };
+
+Vector MarkLocation[3];
 
 struct Object
 {
@@ -15,4 +16,10 @@ struct Object
 	int Rotate;
 };
 
-Vector MarkLocation[3];
+struct BlockScore
+{
+	int Efficiency;
+	int ID;
+};
+
+BlockScore Block[9];

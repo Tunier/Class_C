@@ -18,6 +18,8 @@ int BLOCKCC = NEUTRALITY;
 int Turn = TRUN_PLAYER1;
 int Match = NOT_YET;
 
+int AIBlock = 4;
+
 void SetScene(Object* _Player, Object* _Board);
 
 void gotoxy(int x, int y);
@@ -30,7 +32,7 @@ void LogoProgress();
 void LogoRender();
 
 void MenuInitialize();
-void MenuProgress();
+void MenuProgress(Object* _Player, Object* _Board);
 void MenuRender();
 
 void StageInitialize(Object* _Player, Object* _Board);
@@ -45,6 +47,10 @@ void BoardInitialize(Object* _Board);
 void BoardProgress(Object* _Board);
 void BoardRender(Object* _Board);
 
+void AIInitialize();
+void AIProgress();
+void AIRender();
+
 void MarkPlayer1(int MarkLocationX, int MarkLocationY);
 void MarkPlayer2(int MarkLocationX, int MarkLocationY);
 
@@ -58,7 +64,6 @@ int main(void)
 
 	LogoInitialize();
 	MenuInitialize();
-	StageInitialize(Player, Board);
 
 	DWORD dwTime = GetTickCount();
 
@@ -88,15 +93,19 @@ void SetScene(Object* _Player, Object* _Board)
 		break;
 
 	case SCENEIDS_MENU:
-		MenuProgress();
+		MenuProgress(_Player, _Board);
 		MenuRender();
 		break;
 
-	case SCENEIDS_STAGE:
+	case SCENEIDS_STAGE_PVP:
 		StageProgress(_Player, _Board);
 		StageRender(_Player, _Board);
 		break;
 
+	case SCENEIDS_STAGE_PVE:
+		AIProgress();
+		AIRender();
+		break;
 	case SCENEIDS_EXIT:
 		exit(NULL);
 		break;
@@ -188,10 +197,13 @@ void MenuInitialize()
 
 }
 
-void MenuProgress()
+void MenuProgress(Object* _Player, Object* _Board)
 {
 	if (GetAsyncKeyState('2'))
-		SceneState = SCENEIDS_STAGE;
+	{
+		SceneState = SCENEIDS_STAGE_PVP;
+		StageInitialize(_Player, _Board);
+	}
 }
 
 void MenuRender()
@@ -201,6 +213,15 @@ void MenuRender()
 
 void StageInitialize(Object* _Player, Object* _Board)
 {
+	for (int i = 0; i < 32; ++i)
+	{
+		if (GetAsyncKeyState(VK_UP)) {}
+		if (GetAsyncKeyState(VK_DOWN)) {}
+		if (GetAsyncKeyState(VK_LEFT)) {}
+		if (GetAsyncKeyState(VK_RIGHT)) {}
+		if (GetAsyncKeyState(VK_SPACE)) {}
+	}
+
 	PlayerInitialize(_Player);
 	BoardInitialize(_Board);
 }
@@ -239,195 +260,192 @@ void PlayerProgress(Object* _Player)
 	InputKey(_Player);
 
 	SetDircetion(_Player);
-	
-	if (SceneState == SCENEIDS_STAGE)
+
+	if (GetAsyncKeyState(VK_SPACE))
 	{
-		if (GetAsyncKeyState(VK_SPACE))
+		if (Turn == TRUN_PLAYER1)
 		{
-			if (Turn == TRUN_PLAYER1)
+			if (_Player->Position.x == 10)
 			{
-				if (_Player->Position.x == 10)
+				if (_Player->Position.y == 5)
 				{
-					if (_Player->Position.y == 5)
+					if (BLOCKAA == NEUTRALITY)
 					{
-						if (BLOCKAA == NEUTRALITY)
-						{
-							BLOCKAA = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.x = 30;
+						BLOCKAA = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 15)
-					{
-						if (BLOCKAB == NEUTRALITY)
-						{
-							BLOCKAB = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.x = 30;
-					}
-					else if (_Player->Position.y == 25)
-					{
-						if (BLOCKAC == NEUTRALITY)
-						{
-							BLOCKAC = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.x = 30;
-					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.x = 30;
 				}
-				else if (_Player->Position.x == 30)
+				else if (_Player->Position.y == 15)
 				{
-					if (_Player->Position.y == 5)
+					if (BLOCKAB == NEUTRALITY)
 					{
-						if (BLOCKBA == NEUTRALITY)
-						{
-							BLOCKBA = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.x = 50;
+						BLOCKAB = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 15)
-					{
-						if (BLOCKBB == NEUTRALITY)
-						{
-							BLOCKBB = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.x = 50;
-					}
-					else if (_Player->Position.y == 25)
-					{
-						if (BLOCKBC == NEUTRALITY)
-						{
-							BLOCKBC = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.x = 50;
-					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.x = 30;
 				}
-				else if (_Player->Position.x == 50)
+				else if (_Player->Position.y == 25)
 				{
-					if (_Player->Position.y == 5)
+					if (BLOCKAC == NEUTRALITY)
 					{
-						if (BLOCKCA == NEUTRALITY)
-						{
-							BLOCKCA = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.y = 15;
+						BLOCKAC = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 15)
-					{
-						if (BLOCKCB == NEUTRALITY)
-						{
-							BLOCKCB = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.y = 25;
-					}
-					else if (_Player->Position.y == 25)
-					{
-						if (BLOCKCC == NEUTRALITY)
-						{
-							BLOCKCC = PLAYER1_MARK;
-						}
-						Turn = TRUN_PLAYER2;
-						//_Player->Position.y = 15;
-					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.x = 30;
 				}
 			}
-			else if (Turn == TRUN_PLAYER2)
+			else if (_Player->Position.x == 30)
 			{
-				if (_Player->Position.x == 10)
+				if (_Player->Position.y == 5)
 				{
-					if (_Player->Position.y == 5)
+					if (BLOCKBA == NEUTRALITY)
 					{
-						if (BLOCKAA == NEUTRALITY)
-						{
-							BLOCKAA = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.x = 30;
+						BLOCKBA = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 15)
-					{
-						if (BLOCKAB == NEUTRALITY)
-						{
-							BLOCKAB = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.x = 30;
-					}
-					else if (_Player->Position.y == 25)
-					{
-						if (BLOCKAC == NEUTRALITY)
-						{
-							BLOCKAC = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.x = 30;
-					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.x = 50;
 				}
-				else if (_Player->Position.x == 30)
+				else if (_Player->Position.y == 15)
 				{
-					if (_Player->Position.y == 5)
+					if (BLOCKBB == NEUTRALITY)
 					{
-						if (BLOCKBA == NEUTRALITY)
-						{
-							BLOCKBA = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.x = 50;
+						BLOCKBB = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 15)
-					{
-						if (BLOCKBB == NEUTRALITY)
-						{
-							BLOCKBB = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.x = 50;
-					}
-					else if (_Player->Position.y == 25)
-					{
-						if (BLOCKBC == NEUTRALITY)
-						{
-							BLOCKBC = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.x = 50;
-					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.x = 50;
 				}
-				else if (_Player->Position.x == 50)
+				else if (_Player->Position.y == 25)
 				{
-					if (_Player->Position.y == 5)
+					if (BLOCKBC == NEUTRALITY)
 					{
-						if (BLOCKCA == NEUTRALITY)
-						{
-							BLOCKCA = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.y = 15;
+						BLOCKBC = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 15)
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.x = 50;
+				}
+			}
+			else if (_Player->Position.x == 50)
+			{
+				if (_Player->Position.y == 5)
+				{
+					if (BLOCKCA == NEUTRALITY)
 					{
-						if (BLOCKCB == NEUTRALITY)
-						{
-							BLOCKCB = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.y = 25;
+						BLOCKCA = PLAYER1_MARK;
 					}
-					else if (_Player->Position.y == 25)
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.y = 15;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					if (BLOCKCB == NEUTRALITY)
 					{
-						if (BLOCKCC == NEUTRALITY)
-						{
-							BLOCKCC = PLAYER2_MARK;
-						}
-						Turn = TRUN_PLAYER1;
-						//_Player->Position.y = 15;
+						BLOCKCB = PLAYER1_MARK;
 					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.y = 25;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					if (BLOCKCC == NEUTRALITY)
+					{
+						BLOCKCC = PLAYER1_MARK;
+					}
+					Turn = TRUN_PLAYER2;
+					//_Player->Position.y = 15;
+				}
+			}
+		}
+		else if (Turn == TRUN_PLAYER2)
+		{
+			if (_Player->Position.x == 10)
+			{
+				if (_Player->Position.y == 5)
+				{
+					if (BLOCKAA == NEUTRALITY)
+					{
+						BLOCKAA = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.x = 30;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					if (BLOCKAB == NEUTRALITY)
+					{
+						BLOCKAB = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.x = 30;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					if (BLOCKAC == NEUTRALITY)
+					{
+						BLOCKAC = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.x = 30;
+				}
+			}
+			else if (_Player->Position.x == 30)
+			{
+				if (_Player->Position.y == 5)
+				{
+					if (BLOCKBA == NEUTRALITY)
+					{
+						BLOCKBA = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.x = 50;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					if (BLOCKBB == NEUTRALITY)
+					{
+						BLOCKBB = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.x = 50;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					if (BLOCKBC == NEUTRALITY)
+					{
+						BLOCKBC = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.x = 50;
+				}
+			}
+			else if (_Player->Position.x == 50)
+			{
+				if (_Player->Position.y == 5)
+				{
+					if (BLOCKCA == NEUTRALITY)
+					{
+						BLOCKCA = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.y = 15;
+				}
+				else if (_Player->Position.y == 15)
+				{
+					if (BLOCKCB == NEUTRALITY)
+					{
+						BLOCKCB = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.y = 25;
+				}
+				else if (_Player->Position.y == 25)
+				{
+					if (BLOCKCC == NEUTRALITY)
+					{
+						BLOCKCC = PLAYER2_MARK;
+					}
+					Turn = TRUN_PLAYER1;
+					//_Player->Position.y = 15;
 				}
 			}
 		}
@@ -444,7 +462,18 @@ void PlayerRender(Object* _Player)
 
 void BoardInitialize(Object* _Board)
 {
+	BLOCKAA = NEUTRALITY;
+	BLOCKAB = NEUTRALITY;
+	BLOCKAC = NEUTRALITY;
+	BLOCKBA = NEUTRALITY;
+	BLOCKBB = NEUTRALITY;
+	BLOCKBC = NEUTRALITY;
+	BLOCKCA = NEUTRALITY;
+	BLOCKCB = NEUTRALITY;
+	BLOCKCC = NEUTRALITY;
 
+	Turn = TRUN_PLAYER1;
+	Match = NOT_YET;
 }
 
 void BoardProgress(Object* _Board)
@@ -505,7 +534,7 @@ void BoardProgress(Object* _Board)
 				Match = PLAYER1_WIN;
 		}
 	}
-	
+
 	//**** 이하 플레이어2 승리 판정
 	if (BLOCKAA == PLAYER2_MARK)
 	{
@@ -578,7 +607,7 @@ void BoardRender(Object* _Board)
 			SetCursorPosition((MAX_SIZE_X), y, (char*)"■");
 		}
 	}
-	if (SceneState == SCENEIDS_STAGE)
+	if (SceneState == SCENEIDS_STAGE_PVP)
 	{
 		if (BLOCKAA == PLAYER1_MARK)
 		{
@@ -663,21 +692,8 @@ void BoardRender(Object* _Board)
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
-		if (GetAsyncKeyState(3))
-			system("cls");
-			BLOCKAA = NEUTRALITY;
-			BLOCKAB = NEUTRALITY;
-			BLOCKAC = NEUTRALITY;
-			BLOCKBA = NEUTRALITY;
-			BLOCKBB = NEUTRALITY;
-			BLOCKBC = NEUTRALITY;
-			BLOCKCA = NEUTRALITY;
-			BLOCKCB = NEUTRALITY;
-			BLOCKCC = NEUTRALITY;
-			Turn = TRUN_PLAYER1;
-			Match = NOT_YET;
+		else if (GetAsyncKeyState('3'))
 			SceneState = SCENEIDS_MENU;
-			
 	}
 	else if (Match == PLAYER2_WIN)
 	{
@@ -687,21 +703,149 @@ void BoardRender(Object* _Board)
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
-		if (GetAsyncKeyState(3))
-			system("cls");
-			BLOCKAA = NEUTRALITY;
-			BLOCKAB = NEUTRALITY;
-			BLOCKAC = NEUTRALITY;
-			BLOCKBA = NEUTRALITY;
-			BLOCKBB = NEUTRALITY;
-			BLOCKBC = NEUTRALITY;
-			BLOCKCA = NEUTRALITY;
-			BLOCKCB = NEUTRALITY;
-			BLOCKCC = NEUTRALITY;
-			Turn = TRUN_PLAYER1;
-			Match = NOT_YET;
+		else if (GetAsyncKeyState('3'))
 			SceneState = SCENEIDS_MENU;
 	}
+}
+
+void AIInitialize()
+{
+	
+}
+
+void AIProgress()
+{
+	Block[0].Efficiency = 500;
+	Block[1].Efficiency = 200;
+	Block[2].Efficiency = 500;
+	Block[3].Efficiency = 200;
+	Block[4].Efficiency = 1000;
+	Block[5].Efficiency = 200;
+	Block[6].Efficiency = 500;
+	Block[7].Efficiency = 200;
+	Block[8].Efficiency = 500;
+
+	Block[0].ID = 0;
+	Block[1].ID = 1;
+	Block[2].ID = 2;
+	Block[3].ID = 3;
+	Block[4].ID = 4;
+	Block[5].ID = 5;
+	Block[6].ID = 6;
+	Block[7].ID = 7;
+	Block[8].ID = 8;
+
+	int EfficiencyMaximum = 0;
+	
+	if (BLOCKAA == PLAYER1_MARK)
+	{
+		Block[0].Efficiency -= 10000;
+		Block[1].Efficiency -= 100;
+		Block[2].Efficiency -= 100;
+		Block[3].Efficiency -= 100;
+		Block[6].Efficiency -= 100;
+		Block[8].Efficiency -= 100;
+	}
+	if (BLOCKAB == PLAYER1_MARK)
+	{
+		Block[0].Efficiency -= 100;
+		Block[3].Efficiency -= 10000;
+		Block[5].Efficiency -= 100;
+		Block[6].Efficiency -= 100;		
+	}
+	if (BLOCKAC == PLAYER1_MARK)
+	{
+		Block[0].Efficiency -= 100;
+		Block[2].Efficiency -= 100;
+		Block[3].Efficiency -= 100;
+		Block[6].Efficiency -= 10000;
+		Block[7].Efficiency -= 100;
+		Block[8].Efficiency -= 100;
+	}
+	if (BLOCKBA == PLAYER1_MARK)
+	{
+		Block[0].Efficiency -= 100;
+		Block[1].Efficiency -= 10000;
+		Block[2].Efficiency -= 100;
+		Block[7].Efficiency -= 100;
+	}
+	if (BLOCKBB == PLAYER1_MARK)
+	{
+		Block[4].Efficiency -= 10000;
+	}
+	if (BLOCKBC == PLAYER1_MARK)
+	{
+		Block[1].Efficiency -= 100;
+		Block[6].Efficiency -= 100;
+		Block[7].Efficiency -= 10000;
+		Block[8].Efficiency -= 100;
+	}
+	if (BLOCKCA == PLAYER1_MARK)
+	{
+		Block[0].Efficiency -= 100;
+		Block[1].Efficiency -= 100;
+		Block[2].Efficiency -= 10000;
+		Block[5].Efficiency -= 100;
+		Block[6].Efficiency -= 100;
+		Block[8].Efficiency -= 100;
+	}
+	if (BLOCKCB == PLAYER1_MARK)
+	{
+		Block[2].Efficiency -= 100;
+		Block[3].Efficiency -= 100;
+		Block[5].Efficiency -= 10000;
+		Block[8].Efficiency -= 100;
+	}
+	if (BLOCKCC == PLAYER1_MARK)
+	{
+		Block[0].Efficiency -= 100;
+		Block[2].Efficiency -= 100;
+		Block[5].Efficiency -= 100;
+		Block[6].Efficiency -= 100;
+		Block[7].Efficiency -= 100;
+		Block[8].Efficiency -= 10000;
+	}
+
+	if (EfficiencyMaximum < Block[0].Efficiency)
+	{
+		AIBlock = Block[0].ID;
+	}
+	if (EfficiencyMaximum < Block[1].Efficiency)
+	{
+		AIBlock = Block[1].ID;
+	}
+	if (EfficiencyMaximum < Block[2].Efficiency)
+	{
+		AIBlock = Block[2].ID;
+	}
+	if (EfficiencyMaximum < Block[3].Efficiency)
+	{
+		AIBlock = Block[3].ID;
+	}
+	if (EfficiencyMaximum < Block[4].Efficiency)
+	{
+		AIBlock = Block[4].ID;
+	}
+	if (EfficiencyMaximum < Block[5].Efficiency)
+	{
+		AIBlock = Block[5].ID;
+	}
+	if (EfficiencyMaximum < Block[6].Efficiency)
+	{
+		AIBlock = Block[6].ID;
+	}
+	if (EfficiencyMaximum < Block[7].Efficiency)
+	{
+		AIBlock = Block[7].ID;
+	}
+	if (EfficiencyMaximum < Block[8].Efficiency)
+	{
+		AIBlock = Block[8].ID;
+	}
+}
+
+void AIRender()
+{
 	
 }
 
