@@ -108,7 +108,6 @@ void SetScene(Object* _Player, Object* _Board)
 		StageProgress(_Player, _Board);
 		AIProgress();
 		StageRender(_Player, _Board);
-		AIRender();
 		break;
 	case SCENEIDS_EXIT:
 		exit(NULL);
@@ -187,6 +186,10 @@ void LogoInitialize()
 
 void LogoProgress()
 {
+	LogoInitialize();
+	MenuInitialize();
+	AIInitialize();
+	
 	if (GetAsyncKeyState('1'))
 		SceneState = SCENEIDS_MENU;
 }
@@ -232,6 +235,7 @@ void StageInitialize(Object* _Player, Object* _Board)
 		if (GetAsyncKeyState('1')) {}
 		if (GetAsyncKeyState('2')) {}
 		if (GetAsyncKeyState('3')) {}
+		if (GetAsyncKeyState('4')) {}
 	}
 
 	PlayerInitialize(_Player);
@@ -478,20 +482,11 @@ void PlayerRender(Object* _Player)
 	{
 		gotoxy(80, 15);
 		printf_s("%s", "Turn : Player1");
-		gotoxy(80, 25);
-		printf_s("%d", Block[2].Efficiency);
-		gotoxy(80, 26);
-		printf_s("%d", AIBlock);
-		
 	}
 	else if (Turn == TRUN_PLAYER2)
 	{
 		gotoxy(80, 15);
 		printf_s("%s", "Turn : Player2");
-		gotoxy(80, 25);
-		printf_s("%d", Block[2].Efficiency);
-		gotoxy(80, 26);
-		printf_s("%d", AIBlock);
 	}
 }
 
@@ -625,6 +620,21 @@ void BoardProgress(Object* _Board)
 			if (BLOCKCC == PLAYER2_MARK)
 				Match = PLAYER2_WIN;
 		}
+	}
+
+	//** 이하 무승부 판정
+	if (BLOCKAA == NEUTRALITY) {}
+	else if (BLOCKAB == NEUTRALITY) {}
+	else if (BLOCKAC == NEUTRALITY) {}
+	else if (BLOCKBA == NEUTRALITY) {}
+	else if (BLOCKBB == NEUTRALITY) {}
+	else if (BLOCKBC == NEUTRALITY) {}
+	else if (BLOCKCA == NEUTRALITY) {}
+	else if (BLOCKCB == NEUTRALITY) {}
+	else if (BLOCKCC == NEUTRALITY) {}
+	else
+	{
+		Match = DRAW;
 	}
 }
 
@@ -803,23 +813,34 @@ void BoardRender(Object* _Board)
 	{
 		system("cls");
 		SetCursorPosition(57, 17, (char*)"Player1 Win!");
-		SetCursorPosition(57, 18, (char*)"게임을 종료하려면 ESC키를, 매뉴로 가시려면 3키를 누르세요.");
+		SetCursorPosition(57, 18, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
-		else if (GetAsyncKeyState('3'))
-			SceneState = SCENEIDS_MENU;
+		else if (GetAsyncKeyState('4'))
+			SceneState = SCENEIDS_LOGO;
 	}
 	else if (Match == PLAYER2_WIN)
 	{
 		system("cls");
-		SetCursorPosition(57, 17, (char*)"Player2 Win!");
-		SetCursorPosition(57, 18, (char*)"게임을 종료하려면 ESC키를, 매뉴로 가시려면 3키를 누르세요.");
+		SetCursorPosition(52, 17, (char*)"Player2 Win!");
+		SetCursorPosition(27, 18, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
-		else if (GetAsyncKeyState('3'))
-			SceneState = SCENEIDS_MENU;
+		else if (GetAsyncKeyState('4'))
+			SceneState = SCENEIDS_LOGO;
+	}
+	else if (Match == DRAW)
+	{
+		system("cls");
+		SetCursorPosition(52, 17, (char*)"Darw!");
+		SetCursorPosition(27, 18, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
+		system("pause");
+		if (GetAsyncKeyState(VK_ESCAPE))
+			SceneState = SCENEIDS_EXIT;
+		else if (GetAsyncKeyState('4'))
+			SceneState = SCENEIDS_LOGO;
 	}
 }
 
@@ -942,6 +963,14 @@ void AIProgress()
 				Block[7].Efficiency += 10000;
 			}
 		}
+		if (BLOCKBB == NEUTRALITY)
+		{
+			if (BLOCKBC == PLAYER1_MARK)
+			{
+				Block[4].Efficiency += 10000;
+			}
+		}
+
 	}
 	if (BLOCKBB == PLAYER1_MARK)
 	{
@@ -1019,6 +1048,7 @@ void AIProgress()
 		}
 	}
 	
+	//*** AI승리 알고리즘
 	if (BLOCKAA == PLAYER2_MARK)
 	{
 		Block[0].Efficiency -= 10000;
@@ -1027,29 +1057,53 @@ void AIProgress()
 		{
 			if (BLOCKAC == PLAYER2_MARK)
 			{
-				Block[3].Efficiency += 10000;
+				Block[3].Efficiency += 20000;
+			}
+		}
+		
+		if (BLOCKCC == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER2_MARK)
+			{
+				Block[8].Efficiency += 20000;
 			}
 		}
 	}
 	if (BLOCKAB == PLAYER2_MARK)
 	{
-		Block[3].Efficiency -= 10000;		
+		Block[3].Efficiency -= 10000;
+
+		if (BLOCKCB == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER2_MARK)
+			{
+				Block[5].Efficiency += 20000;
+			}
+		}
 	}
 	if (BLOCKAC == PLAYER2_MARK)
 	{
 		Block[6].Efficiency -= 10000;
 
-		if (BLOCKAB == NEUTRALITY)
+		if (BLOCKBC == NEUTRALITY)
 		{
-			if (BLOCKAA == PLAYER2_MARK)
+			if (BLOCKCC == PLAYER2_MARK)
 			{
-				Block[3].Efficiency += 10000;
+				Block[7].Efficiency += 20000;
 			}
 		}
 	}
 	if (BLOCKBA == PLAYER2_MARK)
 	{
-		Block[1].Efficiency -= 10000;		
+		Block[1].Efficiency -= 10000;	
+		
+		if (BLOCKBC == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER2_MARK)
+			{
+				Block[7].Efficiency += 20000;
+			}
+		}
 	}
 	if (BLOCKBB == PLAYER2_MARK)
 	{
@@ -1057,27 +1111,51 @@ void AIProgress()
 	}
 	if (BLOCKBC == PLAYER2_MARK)
 	{
-		Block[7].Efficiency -= 10000;		
+		Block[7].Efficiency -= 10000;
+
+		if (BLOCKBA == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER2_MARK)
+			{
+				Block[1].Efficiency += 20000;
+			}
+		}
 	}
 	if (BLOCKCA == PLAYER2_MARK)
 	{
 		Block[2].Efficiency -= 10000;
+
+		if (BLOCKCB == NEUTRALITY)
+		{
+			if (BLOCKCC == PLAYER2_MARK)
+			{
+				Block[5].Efficiency += 20000;
+			}
+		}
+
+		if (BLOCKAC == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER2_MARK)
+			{
+				Block[6].Efficiency += 20000;
+			}
+		}
 	}
 	if (BLOCKCB == PLAYER2_MARK)
 	{
 		Block[5].Efficiency -= 10000;
-		/*Block[2].Efficiency += 100;
-		Block[3].Efficiency += 100;
-		Block[8].Efficiency += 100;*/
+
+		if (BLOCKAB == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER2_MARK)
+			{
+				Block[3].Efficiency += 20000;
+			}
+		}
 	}
 	if (BLOCKCC == PLAYER2_MARK)
 	{
 		Block[8].Efficiency -= 10000;
-		/*Block[0].Efficiency += 100;
-		Block[2].Efficiency += 100;
-		Block[5].Efficiency += 100;
-		Block[6].Efficiency += 100;
-		Block[7].Efficiency += 100;*/
 	}
 
 	if (EfficiencyMaximum < Block[0].Efficiency)
