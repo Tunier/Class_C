@@ -68,6 +68,8 @@ int main(void)
 
 	DWORD dwTime = GetTickCount();
 
+	system("mode con:cols=85 lines=32");
+
 	while (true)
 	{
 		if (dwTime + 150 < GetTickCount())
@@ -194,7 +196,7 @@ void LogoProgress()
 
 void LogoRender()
 {
-	SetCursorPosition(57, 17, (char*)"Logo");
+	SetCursorPosition(42, 15, (char*)"Logo");
 }
 
 void MenuInitialize()
@@ -218,7 +220,7 @@ void MenuProgress(Object* _Player, Object* _Board)
 
 void MenuRender()
 {
-	SetCursorPosition(57, 17, (char*)"Menu");
+	SetCursorPosition(42, 15, (char*)"Menu");
 }
 
 void StageInitialize(Object* _Player, Object* _Board)
@@ -478,12 +480,12 @@ void PlayerRender(Object* _Player)
 
 	if (Turn == TRUN_PLAYER1)
 	{
-		gotoxy(80, 15);
+		gotoxy(67, 15);
 		printf_s("%s", "Turn : Player1");
 	}
 	else if (Turn == TRUN_PLAYER2)
 	{
-		gotoxy(80, 15);
+		gotoxy(67, 15);
 		printf_s("%s", "Turn : Player2");
 	}
 }
@@ -810,8 +812,8 @@ void BoardRender(Object* _Board)
 	if (Match == PLAYER1_WIN)
 	{
 		system("cls");
-		SetCursorPosition(57, 17, (char*)"Player1 Win!");
-		SetCursorPosition(57, 18, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
+		SetCursorPosition(36, 13, (char*)"Player1 Win!");
+		SetCursorPosition(12, 15, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
@@ -821,8 +823,8 @@ void BoardRender(Object* _Board)
 	else if (Match == PLAYER2_WIN)
 	{
 		system("cls");
-		SetCursorPosition(52, 17, (char*)"Player2 Win!");
-		SetCursorPosition(27, 18, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
+		SetCursorPosition(36, 13, (char*)"Player2 Win!");
+		SetCursorPosition(12, 15, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
@@ -832,8 +834,8 @@ void BoardRender(Object* _Board)
 	else if (Match == DRAW)
 	{
 		system("cls");
-		SetCursorPosition(52, 17, (char*)"Darw!");
-		SetCursorPosition(27, 18, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
+		SetCursorPosition(36, 13, (char*)"Darw!");
+		SetCursorPosition(12, 15, (char*)"게임을 종료하려면 ESC키를, 다시 시작하시려면 4키를 누르세요.");
 		system("pause");
 		if (GetAsyncKeyState(VK_ESCAPE))
 			SceneState = SCENEIDS_EXIT;
