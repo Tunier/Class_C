@@ -19,6 +19,7 @@ int Turn = TRUN_PLAYER1;
 int Match = NOT_YET;
 
 int AIBlock = 4;
+int EfficiencyMaximum = 0;
 
 void SetScene(Object* _Player, Object* _Board);
 
@@ -64,6 +65,7 @@ int main(void)
 
 	LogoInitialize();
 	MenuInitialize();
+	AIInitialize();
 
 	DWORD dwTime = GetTickCount();
 
@@ -103,7 +105,9 @@ void SetScene(Object* _Player, Object* _Board)
 		break;
 
 	case SCENEIDS_STAGE_PVE:
+		StageProgress(_Player, _Board);
 		AIProgress();
+		StageRender(_Player, _Board);
 		AIRender();
 		break;
 	case SCENEIDS_EXIT:
@@ -194,7 +198,7 @@ void LogoRender()
 
 void MenuInitialize()
 {
-
+	
 }
 
 void MenuProgress(Object* _Player, Object* _Board)
@@ -202,6 +206,11 @@ void MenuProgress(Object* _Player, Object* _Board)
 	if (GetAsyncKeyState('2'))
 	{
 		SceneState = SCENEIDS_STAGE_PVP;
+		StageInitialize(_Player, _Board);
+	}
+	if (GetAsyncKeyState('3'))
+	{
+		SceneState = SCENEIDS_STAGE_PVE;
 		StageInitialize(_Player, _Board);
 	}
 }
@@ -220,6 +229,9 @@ void StageInitialize(Object* _Player, Object* _Board)
 		if (GetAsyncKeyState(VK_LEFT)) {}
 		if (GetAsyncKeyState(VK_RIGHT)) {}
 		if (GetAsyncKeyState(VK_SPACE)) {}
+		if (GetAsyncKeyState('1')) {}
+		if (GetAsyncKeyState('2')) {}
+		if (GetAsyncKeyState('3')) {}
 	}
 
 	PlayerInitialize(_Player);
@@ -272,8 +284,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKAA == NEUTRALITY)
 					{
 						BLOCKAA = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.x = 30;
 				}
 				else if (_Player->Position.y == 15)
@@ -281,8 +293,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKAB == NEUTRALITY)
 					{
 						BLOCKAB = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.x = 30;
 				}
 				else if (_Player->Position.y == 25)
@@ -290,8 +302,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKAC == NEUTRALITY)
 					{
 						BLOCKAC = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.x = 30;
 				}
 			}
@@ -302,8 +314,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKBA == NEUTRALITY)
 					{
 						BLOCKBA = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.x = 50;
 				}
 				else if (_Player->Position.y == 15)
@@ -311,8 +323,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKBB == NEUTRALITY)
 					{
 						BLOCKBB = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.x = 50;
 				}
 				else if (_Player->Position.y == 25)
@@ -320,8 +332,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKBC == NEUTRALITY)
 					{
 						BLOCKBC = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.x = 50;
 				}
 			}
@@ -332,8 +344,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKCA == NEUTRALITY)
 					{
 						BLOCKCA = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.y = 15;
 				}
 				else if (_Player->Position.y == 15)
@@ -341,8 +353,8 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKCB == NEUTRALITY)
 					{
 						BLOCKCB = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.y = 25;
 				}
 				else if (_Player->Position.y == 25)
@@ -350,102 +362,105 @@ void PlayerProgress(Object* _Player)
 					if (BLOCKCC == NEUTRALITY)
 					{
 						BLOCKCC = PLAYER1_MARK;
+						Turn = TRUN_PLAYER2;
 					}
-					Turn = TRUN_PLAYER2;
 					//_Player->Position.y = 15;
 				}
 			}
 		}
-		else if (Turn == TRUN_PLAYER2)
+		else if (SceneState == SCENEIDS_STAGE_PVP)
 		{
-			if (_Player->Position.x == 10)
+			if (Turn == TRUN_PLAYER2)
 			{
-				if (_Player->Position.y == 5)
+				if (_Player->Position.x == 10)
 				{
-					if (BLOCKAA == NEUTRALITY)
+					if (_Player->Position.y == 5)
 					{
-						BLOCKAA = PLAYER2_MARK;
+						if (BLOCKAA == NEUTRALITY)
+						{
+							BLOCKAA = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.x = 30;
 					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.x = 30;
+					else if (_Player->Position.y == 15)
+					{
+						if (BLOCKAB == NEUTRALITY)
+						{
+							BLOCKAB = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.x = 30;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						if (BLOCKAC == NEUTRALITY)
+						{
+							BLOCKAC = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.x = 30;
+					}
 				}
-				else if (_Player->Position.y == 15)
+				else if (_Player->Position.x == 30)
 				{
-					if (BLOCKAB == NEUTRALITY)
+					if (_Player->Position.y == 5)
 					{
-						BLOCKAB = PLAYER2_MARK;
+						if (BLOCKBA == NEUTRALITY)
+						{
+							BLOCKBA = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.x = 50;
 					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.x = 30;
+					else if (_Player->Position.y == 15)
+					{
+						if (BLOCKBB == NEUTRALITY)
+						{
+							BLOCKBB = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.x = 50;
+					}
+					else if (_Player->Position.y == 25)
+					{
+						if (BLOCKBC == NEUTRALITY)
+						{
+							BLOCKBC = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.x = 50;
+					}
 				}
-				else if (_Player->Position.y == 25)
+				else if (_Player->Position.x == 50)
 				{
-					if (BLOCKAC == NEUTRALITY)
+					if (_Player->Position.y == 5)
 					{
-						BLOCKAC = PLAYER2_MARK;
+						if (BLOCKCA == NEUTRALITY)
+						{
+							BLOCKCA = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.y = 15;
 					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.x = 30;
-				}
-			}
-			else if (_Player->Position.x == 30)
-			{
-				if (_Player->Position.y == 5)
-				{
-					if (BLOCKBA == NEUTRALITY)
+					else if (_Player->Position.y == 15)
 					{
-						BLOCKBA = PLAYER2_MARK;
+						if (BLOCKCB == NEUTRALITY)
+						{
+							BLOCKCB = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.y = 25;
 					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.x = 50;
-				}
-				else if (_Player->Position.y == 15)
-				{
-					if (BLOCKBB == NEUTRALITY)
+					else if (_Player->Position.y == 25)
 					{
-						BLOCKBB = PLAYER2_MARK;
+						if (BLOCKCC == NEUTRALITY)
+						{
+							BLOCKCC = PLAYER2_MARK;
+							Turn = TRUN_PLAYER1;
+						}
+						//_Player->Position.y = 15;
 					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.x = 50;
-				}
-				else if (_Player->Position.y == 25)
-				{
-					if (BLOCKBC == NEUTRALITY)
-					{
-						BLOCKBC = PLAYER2_MARK;
-					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.x = 50;
-				}
-			}
-			else if (_Player->Position.x == 50)
-			{
-				if (_Player->Position.y == 5)
-				{
-					if (BLOCKCA == NEUTRALITY)
-					{
-						BLOCKCA = PLAYER2_MARK;
-					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.y = 15;
-				}
-				else if (_Player->Position.y == 15)
-				{
-					if (BLOCKCB == NEUTRALITY)
-					{
-						BLOCKCB = PLAYER2_MARK;
-					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.y = 25;
-				}
-				else if (_Player->Position.y == 25)
-				{
-					if (BLOCKCC == NEUTRALITY)
-					{
-						BLOCKCC = PLAYER2_MARK;
-					}
-					Turn = TRUN_PLAYER1;
-					//_Player->Position.y = 15;
 				}
 			}
 		}
@@ -458,6 +473,26 @@ void PlayerRender(Object* _Player)
 		_Player->Position.x,
 		_Player->Position.y,
 		_Player->pTexture);
+
+	if (Turn == TRUN_PLAYER1)
+	{
+		gotoxy(80, 15);
+		printf_s("%s", "Turn : Player1");
+		gotoxy(80, 25);
+		printf_s("%d", Block[2].Efficiency);
+		gotoxy(80, 26);
+		printf_s("%d", AIBlock);
+		
+	}
+	else if (Turn == TRUN_PLAYER2)
+	{
+		gotoxy(80, 15);
+		printf_s("%s", "Turn : Player2");
+		gotoxy(80, 25);
+		printf_s("%d", Block[2].Efficiency);
+		gotoxy(80, 26);
+		printf_s("%d", AIBlock);
+	}
 }
 
 void BoardInitialize(Object* _Board)
@@ -607,6 +642,7 @@ void BoardRender(Object* _Board)
 			SetCursorPosition((MAX_SIZE_X), y, (char*)"бс");
 		}
 	}
+	
 	if (SceneState == SCENEIDS_STAGE_PVP)
 	{
 		if (BLOCKAA == PLAYER1_MARK)
@@ -684,6 +720,85 @@ void BoardRender(Object* _Board)
 			MarkPlayer2(2, 2);
 		}
 	}
+	
+	if (SceneState == SCENEIDS_STAGE_PVE)
+	{
+		if (BLOCKAA == PLAYER1_MARK)
+		{
+			MarkPlayer1(0, 0);
+		}
+		else if (BLOCKAA == PLAYER2_MARK)
+		{
+			MarkPlayer2(0, 0);
+		}
+		if (BLOCKAB == PLAYER1_MARK)
+		{
+			MarkPlayer1(0, 1);
+		}
+		else if (BLOCKAB == PLAYER2_MARK)
+		{
+			MarkPlayer2(0, 1);
+		}
+		if (BLOCKAC == PLAYER1_MARK)
+		{
+			MarkPlayer1(0, 2);
+		}
+		else if (BLOCKAC == PLAYER2_MARK)
+		{
+			MarkPlayer2(0, 2);
+		}
+
+		if (BLOCKBA == PLAYER1_MARK)
+		{
+			MarkPlayer1(1, 0);
+		}
+		else if (BLOCKBA == PLAYER2_MARK)
+		{
+			MarkPlayer2(1, 0);
+		}
+		if (BLOCKBB == PLAYER1_MARK)
+		{
+			MarkPlayer1(1, 1);
+		}
+		else if (BLOCKBB == PLAYER2_MARK)
+		{
+			MarkPlayer2(1, 1);
+		}
+		if (BLOCKBC == PLAYER1_MARK)
+		{
+			MarkPlayer1(1, 2);
+		}
+		else if (BLOCKBC == PLAYER2_MARK)
+		{
+			MarkPlayer2(1, 2);
+		}
+
+		if (BLOCKCA == PLAYER1_MARK)
+		{
+			MarkPlayer1(2, 0);
+		}
+		else if (BLOCKCA == PLAYER2_MARK)
+		{
+			MarkPlayer2(2, 0);
+		}
+		if (BLOCKCB == PLAYER1_MARK)
+		{
+			MarkPlayer1(2, 1);
+		}
+		else if (BLOCKCB == PLAYER2_MARK)
+		{
+			MarkPlayer2(2, 1);
+		}
+		if (BLOCKCC == PLAYER1_MARK)
+		{
+			MarkPlayer1(2, 2);
+		}
+		else if (BLOCKCC == PLAYER2_MARK)
+		{
+			MarkPlayer2(2, 2);
+		}
+	}
+
 	if (Match == PLAYER1_WIN)
 	{
 		system("cls");
@@ -710,20 +825,15 @@ void BoardRender(Object* _Board)
 
 void AIInitialize()
 {
-	
-}
-
-void AIProgress()
-{
-	Block[0].Efficiency = 500;
-	Block[1].Efficiency = 200;
-	Block[2].Efficiency = 500;
+	Block[0].Efficiency = 502;
+	Block[1].Efficiency = 201;
+	Block[2].Efficiency = 501;
 	Block[3].Efficiency = 200;
 	Block[4].Efficiency = 1000;
-	Block[5].Efficiency = 200;
-	Block[6].Efficiency = 500;
-	Block[7].Efficiency = 200;
-	Block[8].Efficiency = 500;
+	Block[5].Efficiency = 199;
+	Block[6].Efficiency = 499;
+	Block[7].Efficiency = 198;
+	Block[8].Efficiency = 498;
 
 	Block[0].ID = 0;
 	Block[1].ID = 1;
@@ -735,7 +845,32 @@ void AIProgress()
 	Block[7].ID = 7;
 	Block[8].ID = 8;
 
-	int EfficiencyMaximum = 0;
+	EfficiencyMaximum = 0;
+}
+
+void AIProgress()
+{
+	Block[0].Efficiency = 322;
+	Block[1].Efficiency = 201;
+	Block[2].Efficiency = 321;
+	Block[3].Efficiency = 200;
+	Block[4].Efficiency = 1000;
+	Block[5].Efficiency = 199;
+	Block[6].Efficiency = 319;
+	Block[7].Efficiency = 198; 
+	Block[8].Efficiency = 318;
+
+	Block[0].ID = 0;
+	Block[1].ID = 1;
+	Block[2].ID = 2;
+	Block[3].ID = 3;
+	Block[4].ID = 4;
+	Block[5].ID = 5;
+	Block[6].ID = 6;
+	Block[7].ID = 7;
+	Block[8].ID = 8;
+
+	EfficiencyMaximum = 0;
 	
 	if (BLOCKAA == PLAYER1_MARK)
 	{
@@ -745,13 +880,36 @@ void AIProgress()
 		Block[3].Efficiency -= 100;
 		Block[6].Efficiency -= 100;
 		Block[8].Efficiency -= 100;
+
+		if (BLOCKAC == NEUTRALITY)
+		{
+			if (BLOCKAB == PLAYER1_MARK)
+			{
+				Block[6].Efficiency += 10000;
+			}
+		}
+		if (BLOCKAB == NEUTRALITY)
+		{
+			if (BLOCKAC == PLAYER1_MARK)
+			{
+				Block[3].Efficiency += 10000;
+			}
+		}
 	}
 	if (BLOCKAB == PLAYER1_MARK)
 	{
 		Block[0].Efficiency -= 100;
 		Block[3].Efficiency -= 10000;
 		Block[5].Efficiency -= 100;
-		Block[6].Efficiency -= 100;		
+		Block[6].Efficiency -= 100;
+
+		if (BLOCKCB == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER1_MARK)
+			{
+				Block[5].Efficiency += 10000;
+			}
+		}
 	}
 	if (BLOCKAC == PLAYER1_MARK)
 	{
@@ -761,6 +919,14 @@ void AIProgress()
 		Block[6].Efficiency -= 10000;
 		Block[7].Efficiency -= 100;
 		Block[8].Efficiency -= 100;
+		
+		if (BLOCKAA == NEUTRALITY)
+		{
+			if (BLOCKAB == PLAYER1_MARK)
+			{
+				Block[0].Efficiency += 10000;
+			}
+		}		
 	}
 	if (BLOCKBA == PLAYER1_MARK)
 	{
@@ -768,6 +934,14 @@ void AIProgress()
 		Block[1].Efficiency -= 10000;
 		Block[2].Efficiency -= 100;
 		Block[7].Efficiency -= 100;
+
+		if (BLOCKBC == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER1_MARK)
+			{
+				Block[7].Efficiency += 10000;
+			}
+		}
 	}
 	if (BLOCKBB == PLAYER1_MARK)
 	{
@@ -779,6 +953,14 @@ void AIProgress()
 		Block[6].Efficiency -= 100;
 		Block[7].Efficiency -= 10000;
 		Block[8].Efficiency -= 100;
+
+		if (BLOCKBA == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER1_MARK)
+			{
+				Block[1].Efficiency += 10000;
+			}
+		}
 	}
 	if (BLOCKCA == PLAYER1_MARK)
 	{
@@ -788,6 +970,21 @@ void AIProgress()
 		Block[5].Efficiency -= 100;
 		Block[6].Efficiency -= 100;
 		Block[8].Efficiency -= 100;
+
+		if (BLOCKCC == NEUTRALITY)
+		{
+			if (BLOCKCB == PLAYER1_MARK)
+			{
+				Block[8].Efficiency += 10000;
+			}
+		}
+		if (BLOCKCB == NEUTRALITY)
+		{
+			if (BLOCKCC == PLAYER1_MARK)
+			{
+				Block[5].Efficiency += 10000;
+			}
+		}
 	}
 	if (BLOCKCB == PLAYER1_MARK)
 	{
@@ -795,6 +992,14 @@ void AIProgress()
 		Block[3].Efficiency -= 100;
 		Block[5].Efficiency -= 10000;
 		Block[8].Efficiency -= 100;
+
+		if (BLOCKAB == NEUTRALITY)
+		{
+			if (BLOCKBB == PLAYER1_MARK)
+			{
+				Block[3].Efficiency += 10000;
+			}
+		}
 	}
 	if (BLOCKCC == PLAYER1_MARK)
 	{
@@ -804,43 +1009,200 @@ void AIProgress()
 		Block[6].Efficiency -= 100;
 		Block[7].Efficiency -= 100;
 		Block[8].Efficiency -= 10000;
+
+		if (BLOCKCA == NEUTRALITY)
+		{
+			if (BLOCKCB == PLAYER1_MARK)
+			{
+				Block[2].Efficiency += 10000;
+			}
+		}
+	}
+	
+	if (BLOCKAA == PLAYER2_MARK)
+	{
+		Block[0].Efficiency -= 10000;
+		
+		if (BLOCKAB == NEUTRALITY)
+		{
+			if (BLOCKAC == PLAYER2_MARK)
+			{
+				Block[3].Efficiency += 10000;
+			}
+		}
+	}
+	if (BLOCKAB == PLAYER2_MARK)
+	{
+		Block[3].Efficiency -= 10000;		
+	}
+	if (BLOCKAC == PLAYER2_MARK)
+	{
+		Block[6].Efficiency -= 10000;
+
+		if (BLOCKAB == NEUTRALITY)
+		{
+			if (BLOCKAA == PLAYER2_MARK)
+			{
+				Block[3].Efficiency += 10000;
+			}
+		}
+	}
+	if (BLOCKBA == PLAYER2_MARK)
+	{
+		Block[1].Efficiency -= 10000;		
+	}
+	if (BLOCKBB == PLAYER2_MARK)
+	{
+		Block[4].Efficiency -= 10000;
+	}
+	if (BLOCKBC == PLAYER2_MARK)
+	{
+		Block[7].Efficiency -= 10000;		
+	}
+	if (BLOCKCA == PLAYER2_MARK)
+	{
+		Block[2].Efficiency -= 10000;
+	}
+	if (BLOCKCB == PLAYER2_MARK)
+	{
+		Block[5].Efficiency -= 10000;
+		/*Block[2].Efficiency += 100;
+		Block[3].Efficiency += 100;
+		Block[8].Efficiency += 100;*/
+	}
+	if (BLOCKCC == PLAYER2_MARK)
+	{
+		Block[8].Efficiency -= 10000;
+		/*Block[0].Efficiency += 100;
+		Block[2].Efficiency += 100;
+		Block[5].Efficiency += 100;
+		Block[6].Efficiency += 100;
+		Block[7].Efficiency += 100;*/
 	}
 
 	if (EfficiencyMaximum < Block[0].Efficiency)
 	{
+		EfficiencyMaximum = Block[0].Efficiency;
 		AIBlock = Block[0].ID;
 	}
 	if (EfficiencyMaximum < Block[1].Efficiency)
 	{
+		EfficiencyMaximum = Block[1].Efficiency;
 		AIBlock = Block[1].ID;
 	}
 	if (EfficiencyMaximum < Block[2].Efficiency)
 	{
+		EfficiencyMaximum = Block[2].Efficiency;
 		AIBlock = Block[2].ID;
 	}
 	if (EfficiencyMaximum < Block[3].Efficiency)
 	{
+		EfficiencyMaximum = Block[3].Efficiency;
 		AIBlock = Block[3].ID;
 	}
 	if (EfficiencyMaximum < Block[4].Efficiency)
 	{
+		EfficiencyMaximum = Block[4].Efficiency;
 		AIBlock = Block[4].ID;
 	}
 	if (EfficiencyMaximum < Block[5].Efficiency)
 	{
+		EfficiencyMaximum = Block[5].Efficiency;
 		AIBlock = Block[5].ID;
 	}
 	if (EfficiencyMaximum < Block[6].Efficiency)
 	{
+		EfficiencyMaximum = Block[6].Efficiency;
 		AIBlock = Block[6].ID;
 	}
 	if (EfficiencyMaximum < Block[7].Efficiency)
 	{
+		EfficiencyMaximum = Block[7].Efficiency;
 		AIBlock = Block[7].ID;
 	}
 	if (EfficiencyMaximum < Block[8].Efficiency)
 	{
+		EfficiencyMaximum = Block[8].Efficiency;
 		AIBlock = Block[8].ID;
+	}
+
+	if (Turn == TRUN_PLAYER2)
+	{
+		switch (AIBlock)
+		{
+		case 0:
+			if (BLOCKAA == NEUTRALITY)
+			{
+				BLOCKAA = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 3:
+			if (BLOCKAB == NEUTRALITY)
+			{
+				BLOCKAB = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 6:
+			if (BLOCKAC == NEUTRALITY)
+			{
+				BLOCKAC = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 1:
+			if (BLOCKBA == NEUTRALITY)
+			{
+				BLOCKBA = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 4:
+			if (BLOCKBB == NEUTRALITY)
+			{
+				BLOCKBB = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 7:
+			if (BLOCKBC == NEUTRALITY)
+			{
+				BLOCKBC = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 2:
+			if (BLOCKCA == NEUTRALITY)
+			{
+				BLOCKCA = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 5:
+			if (BLOCKCB == NEUTRALITY)
+			{
+				BLOCKCB = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		case 8:
+			if (BLOCKCC == NEUTRALITY)
+			{
+				BLOCKCC = PLAYER2_MARK;
+			}
+			Turn = TRUN_PLAYER1;
+			
+			break;
+		}
 	}
 }
 
