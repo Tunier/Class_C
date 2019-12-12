@@ -19,7 +19,6 @@ int Turn = TRUN_PLAYER1;
 int Match = NOT_YET;
 
 int AIBlock = 4;
-int EfficiencyMaximum = 0;
 
 void SetScene(Object* _Player, Object* _Board);
 
@@ -80,7 +79,6 @@ int main(void)
 			SetScene(Player, Board);
 		}
 	}
-
 
 	return 0;
 }
@@ -865,8 +863,6 @@ void AIInitialize()
 	Block[6].ID = 6;
 	Block[7].ID = 7;
 	Block[8].ID = 8;
-
-	EfficiencyMaximum = 0;
 }
 
 void AIProgress()
@@ -890,8 +886,6 @@ void AIProgress()
 	Block[6].ID = 6;
 	Block[7].ID = 7;
 	Block[8].ID = 8;
-
-	EfficiencyMaximum = 0;
 	
 	if (BLOCKAA == PLAYER1_MARK)
 	{
@@ -970,7 +964,6 @@ void AIProgress()
 				Block[4].Efficiency += 10000;
 			}
 		}
-
 	}
 	if (BLOCKBB == PLAYER1_MARK)
 	{
@@ -1157,6 +1150,8 @@ void AIProgress()
 	{
 		Block[8].Efficiency -= 10000;
 	}
+
+	int EfficiencyMaximum = 0;
 
 	if (EfficiencyMaximum < Block[0].Efficiency)
 	{
