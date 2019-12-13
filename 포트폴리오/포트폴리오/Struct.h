@@ -18,8 +18,18 @@ struct Object
 
 struct BlockScore
 {
+	int State;
 	int Efficiency;
 	int ID;
 };
 
-BlockScore Block[9];
+BlockScore Block[3][3];
+
+struct Texture
+{
+	char* pTexture;
+	Vector Position;
+	Vector Scale;
+};
+
+Texture* Menu[7];
