@@ -78,7 +78,7 @@ int main(void)
 
 			SetScene(Player, Board);
 
-			Sleep(20);
+			Sleep(30);
 		}
 	}
 
@@ -185,7 +185,7 @@ void SetDircetion(Object* _pObj)
 
 void BufferClear()
 {
-	for (int i = 0; i < 32; ++i)
+	for (int i = 0; i < 64; ++i)
 	{
 		if (GetAsyncKeyState(VK_UP)) {}
 		if (GetAsyncKeyState(VK_DOWN)) {}
@@ -194,10 +194,6 @@ void BufferClear()
 		if (GetAsyncKeyState(VK_SPACE)) {}
 		if (GetAsyncKeyState(VK_RETURN)) {}
 		if (GetAsyncKeyState(VK_ESCAPE)) {}
-		if (GetAsyncKeyState('1')) {}
-		if (GetAsyncKeyState('2')) {}
-		if (GetAsyncKeyState('3')) {}
-		if (GetAsyncKeyState('4')) {}
 	}
 }
 
@@ -269,7 +265,7 @@ void MenuProgress(Object* _Player, Object* _Board)
 {
 	BufferClear();
 
-	system("mode con:cols=120 lines=30");
+	system("mode con:cols=120 lines=35");
 
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -282,7 +278,7 @@ void MenuProgress(Object* _Player, Object* _Board)
 
 	if (GetAsyncKeyState(VK_DOWN))
 	{
-		if (MenuState != 5)
+		if (MenuState != 2)
 		{
 			++MenuState;
 			++Menu[0]->Position.y;
@@ -294,27 +290,15 @@ void MenuProgress(Object* _Player, Object* _Board)
 		switch (MenuState)
 		{
 		case 0:
-			SceneState = SCENEIDS_STAGE;
+			SceneState = SCENEIDS_STAGE_PVP;
 			StageInitialize(_Player, _Board);
 			break;
 
 		case 1:
-			SceneState = SCENEIDS_LOAD;
+			SceneState = SCENEIDS_STAGE_PVE;
 			break;
 
 		case 2:
-			SceneState = SCENEIDS_SAVE;
-			break;
-
-		case 3:
-			SceneState = SCENEIDS_OPTION;
-			break;
-
-		case 4:
-			SceneState = SCENEIDS_ABOUT;
-			break;
-
-		case 5:
 			SceneState = SCENEIDS_EXIT;
 			break;
 		}
@@ -323,7 +307,7 @@ void MenuProgress(Object* _Player, Object* _Board)
 
 void MenuRender()
 {
-	for (int i = 0; i < 7; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		SetCursorPosition(
 			Menu[i]->Position.x,
@@ -720,7 +704,7 @@ void BoardProgress(Object* _Board)
 	}
 
 	//** 이하 무승부 판정
-	/*if (Block[0][0].State == NEUTRALITY) {}
+	if (Block[0][0].State == NEUTRALITY) {}
 	else if (Block[0][1].State == NEUTRALITY) {}
 	else if (Block[0][2].State == NEUTRALITY) {}
 	else if (Block[1][0].State == NEUTRALITY) {}
@@ -732,7 +716,7 @@ void BoardProgress(Object* _Board)
 	else
 	{
 		Match = DRAW;
-	}*/
+	}
 }
 
 void BoardRender(Object* _Board)

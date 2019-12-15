@@ -32,4 +32,4 @@ struct Texture
 	Vector Scale;
 };
 
-Texture* Menu[7];
+Texture* Menu[4];
