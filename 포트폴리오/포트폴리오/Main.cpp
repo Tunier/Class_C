@@ -88,11 +88,8 @@ void SetScene(Object* _Player, Object* _Board)
 	switch (SceneState)
 	{
 	case SCENEIDS_LOGO:
-		if (_kbhit)
-		{
-			LogoProgress();
-			LogoRender();
-		}
+		LogoProgress();
+		LogoRender();
 		break;
 
 	case SCENEIDS_MENU:
@@ -215,14 +212,18 @@ void LogoInitialize()
 
 void LogoProgress()
 {
-	BufferClear();
+	
 
 	LogoInitialize();
 	MenuInitialize();
 	AIInitialize();
 
-	if (GetAsyncKeyState(VK_SPACE))
+	if (GetAsyncKeyState(VK_SPACE) || GetAsyncKeyState(VK_RETURN))
+	{
+		BufferClear();
 		SceneState = SCENEIDS_MENU;
+		Sleep(500);
+	}
 }
 
 void LogoRender()
