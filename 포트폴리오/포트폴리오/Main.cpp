@@ -57,7 +57,7 @@ int main(void)
 
 	LogoInitialize();
 	MenuInitialize();
-	StageInitialize;
+	StageInitialize(Player, Board);
 	AIInitialize();
 
 	DWORD dwTime = GetTickCount();
@@ -70,9 +70,7 @@ int main(void)
 
 	while (true)
 	{
-		if (GetAsyncKeyState(VK_UP) || GetAsyncKeyState(VK_DOWN) || GetAsyncKeyState(VK_RIGHT) || GetAsyncKeyState(VK_LEFT) ||
-			GetAsyncKeyState(VK_SPACE) || GetAsyncKeyState(VK_RETURN) || GetAsyncKeyState(VK_ESCAPE) || GetAsyncKeyState('1') ||
-			GetAsyncKeyState('2'))
+		if (_kbhit)
 		{
 			system("cls");
 
@@ -90,25 +88,38 @@ void SetScene(Object* _Player, Object* _Board)
 	switch (SceneState)
 	{
 	case SCENEIDS_LOGO:
-		LogoProgress();
-		LogoRender();
+		if (_kbhit)
+		{
+			LogoProgress();
+			LogoRender();
+		}
 		break;
 
 	case SCENEIDS_MENU:
-		MenuProgress(_Player, _Board);
-		MenuRender();
+		if (_kbhit)
+		{
+			MenuProgress(_Player, _Board);
+			MenuRender();
+		}
 		break;
 
 	case SCENEIDS_STAGE_PVP:
-		StageProgress(_Player, _Board);
-		StageRender(_Player, _Board);
+		if (_kbhit)
+		{
+			StageProgress(_Player, _Board);
+			StageRender(_Player, _Board);
+		}
 		break;
 
 	case SCENEIDS_STAGE_PVE:
-		StageProgress(_Player, _Board);
-		AIProgress();
-		StageRender(_Player, _Board);
+		if (_kbhit)
+		{
+			StageProgress(_Player, _Board);
+			AIProgress();
+			StageRender(_Player, _Board);
+		}
 		break;
+	
 	case SCENEIDS_EXIT:
 		exit(NULL);
 		break;
@@ -209,19 +220,19 @@ void LogoProgress()
 	LogoInitialize();
 	MenuInitialize();
 	AIInitialize();
-	
-	if (GetAsyncKeyState(VK_RETURN) || GetAsyncKeyState(VK_SPACE))
+
+	if (GetAsyncKeyState(VK_SPACE))
 		SceneState = SCENEIDS_MENU;
 }
 
 void LogoRender()
 {
-	SetCursorPosition(10, 4,  (char*)"         ,----,                         ,----,                           ,----,");
-	SetCursorPosition(10, 5,  (char*)"       ,/   .`|                       ,/   .`|                         ,/   .`|");
-	SetCursorPosition(10, 6,  (char*)"     ,`   .'  :                     ,`   .'  :                ,-.    ,`   .'  :");
-	SetCursorPosition(10, 7,  (char*)"   ;    ;     / ,--,              ;    ;     /            ,--/ /|  ;    ;     /");
-	SetCursorPosition(10, 8,  (char*)" .'___,/    ,',--.'|            .'___,/    ,'           ,--. :/ |.'___,/    ,'  ,---.");
-	SetCursorPosition(10, 9,  (char*)" |    :     | |  |,             |    :     |            :  : ' / |    :     |  '   ,'＼");
+	SetCursorPosition(10, 4, (char*)"         ,----,                         ,----,                           ,----,");
+	SetCursorPosition(10, 5, (char*)"       ,/   .`|                       ,/   .`|                         ,/   .`|");
+	SetCursorPosition(10, 6, (char*)"     ,`   .'  :                     ,`   .'  :                ,-.    ,`   .'  :");
+	SetCursorPosition(10, 7, (char*)"   ;    ;     / ,--,              ;    ;     /            ,--/ /|  ;    ;     /");
+	SetCursorPosition(10, 8, (char*)" .'___,/    ,',--.'|            .'___,/    ,'           ,--. :/ |.'___,/    ,'  ,---.");
+	SetCursorPosition(10, 9, (char*)" |    :     | |  |,             |    :     |            :  : ' / |    :     |  '   ,'＼");
 	SetCursorPosition(10, 10, (char*)" ;    |.';  ; `--'_       ,---. ;    |.';  ;  ,--.--.   |  '  /  ;    |.';  ; /   /   |");
 	SetCursorPosition(10, 11, (char*)" `----'  |  | ,' ,'|     /     ＼`----'  |  | /       ＼  '  |  :  `----'  |  |.   ; ,. :");
 	SetCursorPosition(10, 12, (char*)"     '   :  ; '  | |    /    / '    '   :  ;.--.  .-. | |  |   ＼     '   :  ;'   | |: :");
@@ -232,7 +243,7 @@ void LogoRender()
 	SetCursorPosition(10, 17, (char*)"              |  ,   /  ＼   ＼  /           |  ,     .-./'--'");
 	SetCursorPosition(10, 18, (char*)"               ---`-'    `----'             `--`---'");
 
-	SetCursorPosition(50, 20, (char*)"Press Enter");	 
+	SetCursorPosition(46, 20, (char*)"Press SpaceBar");
 }
 
 void MenuInitialize()
@@ -296,6 +307,7 @@ void MenuProgress(Object* _Player, Object* _Board)
 
 		case 1:
 			SceneState = SCENEIDS_STAGE_PVE;
+			StageInitialize(_Player, _Board);
 			break;
 
 		case 2:
@@ -733,7 +745,7 @@ void BoardRender(Object* _Board)
 			SetCursorPosition((MAX_SIZE_X), y, (char*)"■");
 		}
 	}
-	
+
 	if (SceneState == SCENEIDS_STAGE_PVP)
 	{
 		if (Block[0][0].State == PLAYER1_MARK)
@@ -811,7 +823,7 @@ void BoardRender(Object* _Board)
 			MarkPlayer2(2, 2);
 		}
 	}
-	
+
 	if (SceneState == SCENEIDS_STAGE_PVE)
 	{
 		if (Block[0][0].State == PLAYER1_MARK)
@@ -957,7 +969,7 @@ void AIProgress()
 	Block[1][1].Efficiency = 1000;
 	Block[2][1].Efficiency = 199;
 	Block[0][2].Efficiency = 319;
-	Block[1][2].Efficiency = 198; 
+	Block[1][2].Efficiency = 198;
 	Block[2][2].Efficiency = 318;
 
 	Block[0][0].ID = 0;
@@ -969,7 +981,7 @@ void AIProgress()
 	Block[0][2].ID = 6;
 	Block[1][2].ID = 7;
 	Block[2][2].ID = 8;
-	
+
 	if (Block[0][0].State == PLAYER1_MARK)
 	{
 		Block[0][0].Efficiency -= 10000;
@@ -1017,14 +1029,14 @@ void AIProgress()
 		Block[0][2].Efficiency -= 10000;
 		Block[1][2].Efficiency -= 100;
 		Block[2][2].Efficiency -= 100;
-		
+
 		if (Block[0][0].State == NEUTRALITY)
 		{
 			if (Block[0][1].State == PLAYER1_MARK)
 			{
 				Block[0][0].Efficiency += 10000;
 			}
-		}		
+		}
 	}
 	if (Block[1][0].State == PLAYER1_MARK)
 	{
@@ -1123,12 +1135,12 @@ void AIProgress()
 			}
 		}
 	}
-	
+
 	//*** AI승리 알고리즘
 	if (Block[0][0].State == PLAYER2_MARK)
 	{
 		Block[0][0].Efficiency -= 10000;
-		
+
 		if (Block[0][1].State == NEUTRALITY)
 		{
 			if (Block[0][2].State == PLAYER2_MARK)
@@ -1136,7 +1148,7 @@ void AIProgress()
 				Block[0][1].Efficiency += 20000;
 			}
 		}
-		
+
 		if (Block[2][2].State == NEUTRALITY)
 		{
 			if (Block[1][1].State == PLAYER2_MARK)
@@ -1178,8 +1190,8 @@ void AIProgress()
 	}
 	if (Block[1][0].State == PLAYER2_MARK)
 	{
-		Block[1][0].Efficiency -= 10000;	
-		
+		Block[1][0].Efficiency -= 10000;
+
 		if (Block[1][2].State == NEUTRALITY)
 		{
 			if (Block[1][1].State == PLAYER2_MARK)
@@ -1362,7 +1374,7 @@ void AIProgress()
 
 void AIRender()
 {
-	
+
 }
 
 void MarkPlayer1(int MarkLocationX, int MarkLocationY)
