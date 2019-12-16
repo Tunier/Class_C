@@ -63,15 +63,13 @@ int main(void)
 	DWORD dwTime = GetTickCount();
 
 	system("mode con:cols=114 lines=24");
-
-	system("cls");
-
-	SetScene(Player, Board);
-
+		
 	while (true)
 	{
-		if (_kbhit)
+		if (dwTime + 100 < GetTickCount())
 		{
+			dwTime = GetTickCount();
+			
 			system("cls");
 
 			SetScene(Player, Board);
@@ -212,8 +210,6 @@ void LogoInitialize()
 
 void LogoProgress()
 {
-	
-
 	LogoInitialize();
 	MenuInitialize();
 	AIInitialize();
@@ -244,7 +240,7 @@ void LogoRender()
 	SetCursorPosition(10, 17, (char*)"              |  ,   /  ¡¬   ¡¬  /           |  ,     .-./'--'");
 	SetCursorPosition(10, 18, (char*)"               ---`-'    `----'             `--`---'");
 
-	SetCursorPosition(46, 20, (char*)"Press SpaceBar");
+	SetCursorPosition(46, 20, (char*)"Press EnterKey");
 }
 
 void MenuInitialize()
