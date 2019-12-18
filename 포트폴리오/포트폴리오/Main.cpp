@@ -63,13 +63,13 @@ int main(void)
 	DWORD dwTime = GetTickCount();
 
 	system("mode con:cols=114 lines=24");
-		
+
 	while (true)
 	{
 		if (dwTime + 100 < GetTickCount())
 		{
 			dwTime = GetTickCount();
-			
+
 			system("cls");
 
 			SetScene(Player, Board);
@@ -114,7 +114,7 @@ void SetScene(Object* _Player, Object* _Board)
 			StageRender(_Player, _Board);
 		}
 		break;
-	
+
 	case SCENEIDS_EXIT:
 		exit(NULL);
 		break;
@@ -161,28 +161,24 @@ void SetDircetion(Object* _pObj)
 		if (_pObj->Position.y != 5)
 			_pObj->Position.y -= 10;
 		_pObj->Rotate = ROTATEIDS_NEUTRALITY;
-		Sleep(100);
 		break;
 
 	case ROTATEIDS_DOWN:
 		if (_pObj->Position.y != 25)
 			_pObj->Position.y += 10;
 		_pObj->Rotate = ROTATEIDS_NEUTRALITY;
-		Sleep(100);
 		break;
 
 	case ROTATEIDS_LEFT:
 		if (_pObj->Position.x != 10)
 			_pObj->Position.x -= 20;
 		_pObj->Rotate = ROTATEIDS_NEUTRALITY;
-		Sleep(100);
 		break;
 
 	case ROTATEIDS_RIGHT:
 		if (_pObj->Position.x != 50)
 			_pObj->Position.x += 20;
 		_pObj->Rotate = ROTATEIDS_NEUTRALITY;
-		Sleep(100);
 		break;
 	case ROTATEIDS_NEUTRALITY:
 		break;
@@ -224,12 +220,12 @@ void LogoProgress()
 
 void LogoRender()
 {
-	SetCursorPosition(10, 4, (char*)"         ,----,                         ,----,                           ,----,");
-	SetCursorPosition(10, 5, (char*)"       ,/   .`|                       ,/   .`|                         ,/   .`|");
-	SetCursorPosition(10, 6, (char*)"     ,`   .'  :                     ,`   .'  :                ,-.    ,`   .'  :");
-	SetCursorPosition(10, 7, (char*)"   ;    ;     / ,--,              ;    ;     /            ,--/ /|  ;    ;     /");
-	SetCursorPosition(10, 8, (char*)" .'___,/    ,',--.'|            .'___,/    ,'           ,--. :/ |.'___,/    ,'  ,---.");
-	SetCursorPosition(10, 9, (char*)" |    :     | |  |,             |    :     |            :  : ' / |    :     |  '   ,'＼");
+	SetCursorPosition(10, 4,  (char*)"         ,----,                         ,----,                           ,----,");
+	SetCursorPosition(10, 5,  (char*)"       ,/   .`|                       ,/   .`|                         ,/   .`|");
+	SetCursorPosition(10, 6,  (char*)"     ,`   .'  :                     ,`   .'  :                ,-.    ,`   .'  :");
+	SetCursorPosition(10, 7,  (char*)"   ;    ;     / ,--,              ;    ;     /            ,--/ /|  ;    ;     /");
+	SetCursorPosition(10, 8,  (char*)" .'___,/    ,',--.'|            .'___,/    ,'           ,--. :/ |.'___,/    ,'  ,---.");
+	SetCursorPosition(10, 9,  (char*)" |    :     | |  |,             |    :     |            :  : ' / |    :     |  '   ,'＼");
 	SetCursorPosition(10, 10, (char*)" ;    |.';  ; `--'_       ,---. ;    |.';  ;  ,--.--.   |  '  /  ;    |.';  ; /   /   |");
 	SetCursorPosition(10, 11, (char*)" `----'  |  | ,' ,'|     /     ＼`----'  |  | /       ＼  '  |  :  `----'  |  |.   ; ,. :");
 	SetCursorPosition(10, 12, (char*)"     '   :  ; '  | |    /    / '    '   :  ;.--.  .-. | |  |   ＼     '   :  ;'   | |: :");
@@ -273,7 +269,7 @@ void MenuProgress(Object* _Player, Object* _Board)
 {
 	BufferClear();
 
-	system("mode con:cols=120 lines=35");
+	system("mode con:cols=120 lines=34");
 
 	if (GetAsyncKeyState(VK_UP))
 	{
@@ -380,7 +376,6 @@ void PlayerProgress(Object* _Player)
 						Block[0][0].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.x = 30;
 				}
 				else if (_Player->Position.y == 15)
 				{
@@ -389,7 +384,6 @@ void PlayerProgress(Object* _Player)
 						Block[0][1].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.x = 30;
 				}
 				else if (_Player->Position.y == 25)
 				{
@@ -398,7 +392,6 @@ void PlayerProgress(Object* _Player)
 						Block[0][2].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.x = 30;
 				}
 			}
 			else if (_Player->Position.x == 30)
@@ -410,7 +403,6 @@ void PlayerProgress(Object* _Player)
 						Block[1][0].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.x = 50;
 				}
 				else if (_Player->Position.y == 15)
 				{
@@ -419,7 +411,6 @@ void PlayerProgress(Object* _Player)
 						Block[1][1].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.x = 50;
 				}
 				else if (_Player->Position.y == 25)
 				{
@@ -428,7 +419,6 @@ void PlayerProgress(Object* _Player)
 						Block[1][2].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.x = 50;
 				}
 			}
 			else if (_Player->Position.x == 50)
@@ -440,7 +430,6 @@ void PlayerProgress(Object* _Player)
 						Block[2][0].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.y = 15;
 				}
 				else if (_Player->Position.y == 15)
 				{
@@ -449,7 +438,6 @@ void PlayerProgress(Object* _Player)
 						Block[2][1].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.y = 25;
 				}
 				else if (_Player->Position.y == 25)
 				{
@@ -458,7 +446,6 @@ void PlayerProgress(Object* _Player)
 						Block[2][2].State = PLAYER1_MARK;
 						Turn = TRUN_PLAYER2;
 					}
-					//_Player->Position.y = 15;
 				}
 			}
 		}
@@ -475,7 +462,6 @@ void PlayerProgress(Object* _Player)
 							Block[0][0].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.x = 30;
 					}
 					else if (_Player->Position.y == 15)
 					{
@@ -484,7 +470,6 @@ void PlayerProgress(Object* _Player)
 							Block[0][1].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.x = 30;
 					}
 					else if (_Player->Position.y == 25)
 					{
@@ -493,7 +478,6 @@ void PlayerProgress(Object* _Player)
 							Block[0][2].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.x = 30;
 					}
 				}
 				else if (_Player->Position.x == 30)
@@ -505,7 +489,6 @@ void PlayerProgress(Object* _Player)
 							Block[1][0].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.x = 50;
 					}
 					else if (_Player->Position.y == 15)
 					{
@@ -514,7 +497,6 @@ void PlayerProgress(Object* _Player)
 							Block[1][1].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.x = 50;
 					}
 					else if (_Player->Position.y == 25)
 					{
@@ -523,7 +505,6 @@ void PlayerProgress(Object* _Player)
 							Block[1][2].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.x = 50;
 					}
 				}
 				else if (_Player->Position.x == 50)
@@ -535,7 +516,6 @@ void PlayerProgress(Object* _Player)
 							Block[2][0].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.y = 15;
 					}
 					else if (_Player->Position.y == 15)
 					{
@@ -544,7 +524,6 @@ void PlayerProgress(Object* _Player)
 							Block[2][1].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.y = 25;
 					}
 					else if (_Player->Position.y == 25)
 					{
@@ -553,7 +532,6 @@ void PlayerProgress(Object* _Player)
 							Block[2][2].State = PLAYER2_MARK;
 							Turn = TRUN_PLAYER1;
 						}
-						//_Player->Position.y = 15;
 					}
 				}
 			}
@@ -568,6 +546,7 @@ void PlayerRender(Object* _Player)
 		_Player->Position.y,
 		_Player->pTexture);
 
+	//** 턴 표기
 	if (Turn == TRUN_PLAYER1)
 	{
 		gotoxy(67, 15);
@@ -582,6 +561,7 @@ void PlayerRender(Object* _Player)
 
 void BoardInitialize(Object* _Board)
 {
+	//** 보드판관련 초기화
 	Block[0][0].State = NEUTRALITY;
 	Block[0][1].State = NEUTRALITY;
 	Block[0][2].State = NEUTRALITY;
@@ -1386,15 +1366,9 @@ void MarkPlayer1(int MarkLocationX, int MarkLocationY)
 	printf_s("%s", "■■■");
 
 	for (int y = MarkLocation[MarkLocationY].y + 1; y < MarkLocation[MarkLocationY].y + 4; ++y)
-	{
 		for (int x = MarkLocation[MarkLocationX].x - 2; x < MarkLocation[MarkLocationX].x + 7; ++x)
-		{
 			if (x == MarkLocation[MarkLocationX].x - 2 || x == MarkLocation[MarkLocationX].x + 6)
-			{
 				SetCursorPosition(x, y, (char*)"■");
-			}
-		}
-	}
 
 	gotoxy(MarkLocation[MarkLocationX].x, MarkLocation[MarkLocationY].y + 4);
 	printf_s("%s", "■■■");
