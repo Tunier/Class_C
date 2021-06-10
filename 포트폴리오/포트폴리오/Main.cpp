@@ -66,7 +66,7 @@ int main(void)
 
 	while (true)
 	{
-		if (dwTime + 100 < GetTickCount())
+		if (dwTime + 150 < GetTickCount())
 		{
 			dwTime = GetTickCount();
 
